@@ -26,21 +26,28 @@ def get_availability(time : str) -> int:
 noVehicles = len(data["vehicles"])
 
 vehicleData = dict(
-    vehicleId = []*noVehicles,
-    vehicleCanTake = []*noVehicles,
-    vehicleStart = []*noVehicles,
-    vehicleEnd = []*noVehicles,
-    vehicleCapacity = []*noVehicles,
-    vehicleAvailability = []*noVehicles,
+    vehicleCanTake = [0]*noVehicles,
+    vehicleStart = [0]*noVehicles,
+    vehicleEnd = [0]*noVehicles,
+    vehicleCapacity = [0]*noVehicles,
+    vehicleAvailability = [0]*noVehicles,
 )
 
+noShifts = 0
+
 for index, v in enumerate(data["vehicle"]):
-    vehicleData["vehicleId"][index] = v["id"]
     vehicleData["vehicleCanTake"][index] = v["canTake"]
     vehicleData["vehicleStart"][index] = v["start"]
     vehicleData["vehicleEnd"][index] = v["end"]
     vehicleData["vehicleCapacity"][index] = v["capacity"]
-    vehicleData["vehicleAvailability"][index] = get_availability(v["availability"])
+    vehicleData["vehicleAvailability"][index] = [get_availability(i) for i in v["availability"]]
+    noShifts = max(noShifts, len(v["availability"]))
+
+for key in vehicleData:
+    instance[key] = vehicleData[key]
+
+instance["noVehicles"] = noVehicles
+instance["noShifts"] = noShifts
 
 instance["sameVehicleBackward"] = data["sameVehicleBackward"]
 instance["maxWaitTime"] = get_minutes(data["maxWaitTime"])

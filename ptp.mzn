@@ -38,16 +38,21 @@ output ["distMatrix = ", show(distMatrix), "\n"]
 
 % int : no_patients_categories;
 % int : max_availability_partitions;
-% int : no_vehicles;
-% int : id_vehicle_start = id_places_end+1;
-% int : id_vehicle_end = id_vehicle_start+no_vehicles-1;
-% array [id_vehicle_start..id_vehicle_end, 0..no_patients_categories-1] of 
-%   int : vehicles_canTake;
-% array [id_vehicle_start..id_vehicle_end] of int : vehicles_start;
-% array [id_vehicle_start..id_vehicle_end] of int : vehicles_end;
-% array [id_vehicle_start..id_vehicle_end] of int : vehicles_capacity;
-% array [id_vehicle_start..id_vehicle_end, 0..max_availability_partitions-1, 0..1] of 
-%   int : vehicles_availability;
+int : noVehicles;
+int : noShifts;
+array [1..noVehicles] of int : vehicleCanTake;
+array [1..noVehicles] of int : vehicleStart;
+array [1..noVehicles] of int : vehicleEnd;
+array [1..noVehicles] of int : vehicleCapacity;
+array [1..noVehicles, 1..noShifts, 1..2] of int : vehicleAvailability;
+
+output ["noVehicles = ", show(noVehicles), "\n"];
+output ["noShifts = ", show(noShifts), "\n"];
+output ["vehicleCanTake = ", show(vehicleCanTake), "\n"];
+output ["vehicleStart = ", show(vehicleStart), "\n"];
+output ["vehicleEnd = ", show(vehicleEnd), "\n"];
+output ["vehicleCapacity = ", show(vehicleCapacity), "\n"];
+output ["vehicleAvailability = ", show(vehicleAvailability), "\n"];
 
 % int : no_patients;
 % int : id_patients_start = id_vehicle_end+1;
