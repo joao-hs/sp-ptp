@@ -73,6 +73,19 @@ array [1..noRequests, ActivityType] of var 0..DAY_IN_MINUTES : activityEnd; % st
 array [1..noRequests, ActivityType] of var bool : activityExecutionStatus;
 array [1..noRequests, ActivityType] of var 0..noVehicles : activityVehicle;
 
+% this 4 arrays could be the auxiliary variables for the output. I think this way we wouldn't need the activityVehicle variable
+
+array [1..noVehicles, 1..noRequests, 1..noRequests] of var 1..noRequests : vehicleTripPatients; % [ [ [ ], [ 22, 25 ] ] ] - project statement example would be 
+% like this. First array inside is to identify the vehicle and the remaining arrays inside that array would be the patients of each trip of that vehicle
+
+array [1..noVehicles, 1..noRequests] of var 1..noPlaces : vehicleTripOrigin; % array with array inside that would store the origins of each trip for every 
+% vehicle. Might need a noTrips variable
+
+array [1..noVehicles, 1..noRequests] of var 1..noPlaces : vehicleTripDestination; % array with array inside that would store the destinations of each trip for
+% every vehicle. Might need a noTrips variable
+
+array [1..noVehicles, 1..noRequests] of var 0..DAY_IN_MINUTES : vehicleTripArrival; % array with array inside that would store the arrival time of each trip for
+% every vehicle.
 
 % activityStart = [|1,4,|3,7|]
 % activityDuration = [|1,1,|3,1|]
