@@ -36,6 +36,40 @@ instance = Instance(solver, model)
 # -----------------------------------------------------------------------------
 # ------------------------ Parse Input & Assign Values ------------------------
 # -----------------------------------------------------------------------------
+# JSON input format:
+# {
+#     "sameVehicleBackward": <bool>,
+#     "maxWaitTime": <str>, # HHhMM
+#     "places": [
+#         {
+#             "id": <int>,
+#             "category": <int>
+#         }
+#     ],
+#     "vehicles": [
+#         {
+#             "id": <int>,
+#             "canTake": [<int>],
+#             "start": <int>,
+#             "end": <int>,
+#             "capacity": <int>,
+#             "availability": [<str>] # HHhMM:HHhMM
+#         }
+#     ],
+#     "patients": [
+#         {
+#             "id": <int>,
+#             "category": <int>,
+#             "load": <int>,
+#             "start": <int>,
+#             "destination": <int>,
+#             "end": <int>,
+#             "rdvTime": <str>, # HHhMM
+#             "rdvDuration": <str>, # HHhMM
+#             "srvDuration": <str> # HHhMM
+#         }
+#     ]
+# }
 
 instance["sameVehicleBackward"] = data["sameVehicleBackward"]
 instance["maxWaitTime"] = get_minutes(data["maxWaitTime"])
@@ -106,6 +140,24 @@ instance["distMatrix"] = data["distMatrix"]
 # -----------------------------------------------------------------------------
 # --------------------------- Solve & Parse Output ----------------------------
 # -----------------------------------------------------------------------------
+# JSON output format:
+# {
+#     "requests": <int>,
+#     "vehicles": [
+#         {
+#             "id": <int>,
+#             "trips": [
+#                 {
+#                     "origin": <int>,
+#                     "destination": <int>,
+#                     "arrival": <str>, # HHhMM
+#                     "patients": [<int>]
+#                 }
+#             ]
+#         }
+#     ]
+# }
+
 
 result = instance.solve()   
 
