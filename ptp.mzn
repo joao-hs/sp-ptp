@@ -4,7 +4,7 @@ bool : sameVehicleBackward;
 int : maxWaitTime;
 
 int : noPlaces;
-enum PlaceCategory = {MedicalCenter, VehicleDepot, PatientLocation} 
+enum PlaceCategory = {MedicalCenter, VehicleDepot, PatientLocation};
 array [1..noPlaces] of PlaceCategory : placeCategory;
 
 int : noVehicles;
@@ -72,6 +72,12 @@ array [1..noRequests, ActivityType] of var 0..DAY_IN_MINUTES : activityDuration;
 array [1..noRequests, ActivityType] of var 0..DAY_IN_MINUTES : activityEnd; % start + duration, may be irrelevant
 array [1..noRequests, ActivityType] of var bool : activityExecutionStatus;
 array [1..noRequests, ActivityType] of var 0..noVehicles : activityVehicle;
+
+var 0..noRequests : grantedRequests = count(i in 1..noRequests)(activityExecutionStatus[i, Forward] /\ activityExecutionStatus[i, Backward]);
+
+solve maximize grantedRequests;
+
+% ----------------------------------------------
 
 % this 4 arrays could be the auxiliary variables for the output. I think this way we wouldn't need the activityVehicle variable
 

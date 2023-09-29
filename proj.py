@@ -15,6 +15,55 @@ def get_minutes(time : str) -> int:
 def get_availability(time : str) -> list:
     return [int(time[:2])*60+int(time[3:5]), int(time[6:8])*60+int(time[9:])]
 
+# Converts 0,1,2 to MedicalCenter,VehicleDepot,PatientLocation
+def get_place_category(place : int) -> str:
+    return "MedicalCenter" if place == 0 else "VehicleDepot" if place == 1 else "PatientLocation"
+
+# Aggregates the output of the model into a list of trips by vehicle
+# TODO: missing special cases (e.g. no returns, no forward activity, etc.)
+def get_trips_by_vehicle(activityStart : list, activityEnd : list, activityVehicle: list) -> dict:
+    global noVehicles, noRequests
+
+    vehicleTripsAux = {i:list() for i in range(noVehicles)}
+
+    # auxiliary tuple ~ (location, arrival, associatedPatient)
+    vehicleTrips = {
+        i: list() for i in range(noVehicles)
+    }
+    for patient, (actStart, actEnd, actVehicle) in enumerate(zip(activityStart, activityEnd, activityVehicle)):
+        vehicleTripsAux[actVehicle[0]].append((requestData["requestStart"][patient], actStart[0], patient))
+        vehicleTripsAux[actVehicle[0]].append((requestData["requestDestination"][patient], actEnd[0], patient))
+        vehicleTripsAux[actVehicle[1]].append((requestData["requestDestination"][patient], actStart[1], patient))
+        vehicleTripsAux[actVehicle[1]].append((requestData["requestReturn"][patient], actEnd[1], patient))
+    
+    onboardPatients = set()
+    for vehicle in vehicleTripsAux:
+        vehicleTripsAux[vehicle].sort(key=lambda x: x[1]) # sort by arrival time
+        # trip tuple ~ (origin, destination, arrival, patients)
+        (origin, arrival, patient) = vehicleTripsAux[vehicle].pop(0)
+        vehicleTrips[vehicle].append((0, origin, arrival, set())) # first trip is from vehicle start to first patient
+        onboardPatients.add(patient) # first patient gets onboard
+        
+        while vehicleTripsAux[vehicle]:
+            (destination, arrival, patient) = vehicleTripsAux[vehicle].pop(0)
+            vehicleTrips[vehicle].append((origin, destination, arrival, onboardPatients.copy()))
+            if patient in onboardPatients: # if the activity is associated with the patient and they are onboard, they are now offboarding
+                onboardPatients.remove(patient)
+            else: # otherwise, they are now onboarding
+                onboardPatients.add(patient)
+            origin=destination # the next origin is the current destination
+        
+        vehicleTrips[vehicle].append((
+            origin, 
+            vehicleData["vehicleEnd"][vehicle], 
+            arrival+ # last arrival time plus
+            requestData["requestBoardingDuration"][patient]+ # the offboarding time of the last patient plus
+            data["distMatrix"][destination][vehicleData["vehicleEnd"][vehicle]], # the time it takes to go from the current location to the vehicle depot
+            onboardPatients.copy() # should be empty
+            )) # the last trip is to the vehicle depot
+        
+    return vehicleTrips
+
 
 # -----------------------------------------------------------------------------
 # ----------------------------------- Setup -----------------------------------
@@ -76,7 +125,7 @@ instance["maxWaitTime"] = get_minutes(data["maxWaitTime"])
 
 noPlaces = len(data["places"])
 instance["noPlaces"] = noPlaces
-instance["placeCategory"] = [place["category"] for place in data["places"]]
+instance["placeCategory"] = [get_place_category(place["category"]) for place in data["places"]]
 
 noVehicles = len(data["vehicles"])
 instance["noVehicles"] = noVehicles
@@ -162,3 +211,27 @@ instance["distMatrix"] = data["distMatrix"]
 result = instance.solve()   
 
 print(result)
+
+# vehicleTrips = get_trips_by_vehicle(result["activityStart"], result["activityEnd"], result["activityVehicle"])
+
+# dump(
+#     {
+#         "requests": result["noRequestsGranted"],
+#         "vehicles": [
+#             {
+#                 "id": i,
+#                 "trips": [
+#                     {
+#                         "origin": trip[0],
+#                         "destination": trip[1],
+#                         "arrival": f"{trip[2]//60}h{trip[2]%60:02d}",
+#                         "patients": [trip[3]]
+#                     }
+#                     for trip in vehicleTrips[i]
+#                 ]
+#             } for i in range(noVehicles)
+#         ]
+#     },
+#     fp=output_file
+# )
+
