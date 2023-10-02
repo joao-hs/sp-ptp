@@ -2,6 +2,8 @@
 
 ran_tests=1
 
+start=$(date +%s.%N)
+
 if [ -z "$1" ]; then
     echo "Running all tests"
     for f in instances/*/*.in.json; do
@@ -40,8 +42,8 @@ elif [ $# == 1 ]; then
         done
     # elif $1.in.json is in instances subdirectories
     elif [ -f instances/*/$1.in.json ]; then
-        echo "OUTPUT FOR TEST: $(basename ${f/.in.json/})------------------"
-        echo proj.py instances/${1/_*/}/$1.in.json instances/${1/_*/}/$1.out.json
+        echo "OUTPUT FOR TEST: $1 -----------------------------------------"
+        python proj.py instances/${1/_*/}/$1.in.json instances/${1/_*/}/$1.out.json
         echo "TEST DONE ---------------------------------------------------"
     else
         ran_tests=0
@@ -56,7 +58,9 @@ if [ $ran_tests == 0 ]; then
     echo "  easy, medium, hard, custom"
     exit 1
 else
-    echo "Done"
+    end=$(date +%s.%N)
+    runtime=$(echo "$end - $start" | bc)
+    echo "Done in $runtime seconds."
     exit 0
 fi
 
