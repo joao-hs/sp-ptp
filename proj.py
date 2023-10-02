@@ -212,26 +212,26 @@ result = instance.solve()
 
 print(result)
 
-# vehicleTrips = get_trips_by_vehicle(result["activityStart"], result["activityEnd"], result["activityVehicle"])
+vehicleTrips = get_trips_by_vehicle(result["activityStart"], result["activityEnd"], result["activityVehicle"])
 
-# dump(
-#     {
-#         "requests": result["noRequestsGranted"],
-#         "vehicles": [
-#             {
-#                 "id": i,
-#                 "trips": [
-#                     {
-#                         "origin": trip[0],
-#                         "destination": trip[1],
-#                         "arrival": f"{trip[2]//60}h{trip[2]%60:02d}",
-#                         "patients": [trip[3]]
-#                     }
-#                     for trip in vehicleTrips[i]
-#                 ]
-#             } for i in range(noVehicles)
-#         ]
-#     },
-#     fp=output_file
-# )
+dump(
+    {
+        "requests": result["objective"],
+        "vehicles": [
+            {
+                "id": i,
+                "trips": [
+                    {
+                        "origin": trip[0],
+                        "destination": trip[1],
+                        "arrival": f"{trip[2]//60}h{trip[2]%60:02d}",
+                        "patients": list(trip[3])
+                    }
+                    for trip in vehicleTrips[i]
+                ]
+            } for i in range(noVehicles)
+        ]
+    },
+    fp=output_file
+)
 

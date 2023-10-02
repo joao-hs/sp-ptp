@@ -77,6 +77,15 @@ var 0..noRequests : grantedRequests = count(i in 1..noRequests)(activityExecutio
 
 solve maximize grantedRequests;
 
+output ["grantedRequests = ", show(grantedRequests), "\n"];
+output ["activityStart = ", show(activityStart), "\n"];
+output ["activityDuration = ", show(activityDuration), "\n"];
+output ["activityEnd = ", show(activityEnd), "\n"];
+output ["activityExecutionStatus = ", show(activityExecutionStatus), "\n"];
+output ["activityVehicle = ", show(activityVehicle), "\n"];
+
+
+
 % ----------------------------------------------
 
 % this 4 arrays could be the auxiliary variables for the output. I think this way we wouldn't need the activityVehicle variable
