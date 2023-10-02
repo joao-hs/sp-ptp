@@ -21,6 +21,7 @@ def get_place_category(place : int) -> str:
 
 # Aggregates the output of the model into a list of trips by vehicle
 # TODO: missing special cases (e.g. no returns, no forward activity, etc.)
+#   it might be done :)
 def get_trips_by_vehicle(activityStart : list, activityEnd : list, activityVehicle: list) -> dict:
     global noVehicles, noRequests
 
@@ -31,13 +32,17 @@ def get_trips_by_vehicle(activityStart : list, activityEnd : list, activityVehic
         i: list() for i in range(noVehicles)
     }
     for patient, (actStart, actEnd, actVehicle) in enumerate(zip(activityStart, activityEnd, activityVehicle)):
-        vehicleTripsAux[actVehicle[0]].append((requestData["requestStart"][patient], actStart[0], patient))
-        vehicleTripsAux[actVehicle[0]].append((requestData["requestDestination"][patient], actEnd[0], patient))
-        vehicleTripsAux[actVehicle[1]].append((requestData["requestDestination"][patient], actStart[1], patient))
-        vehicleTripsAux[actVehicle[1]].append((requestData["requestReturn"][patient], actEnd[1], patient))
+        if requestData["requestStart"][patient] != -1:
+            vehicleTripsAux[actVehicle[0]].append((requestData["requestStart"][patient], actStart[0], patient))
+            vehicleTripsAux[actVehicle[0]].append((requestData["requestDestination"][patient], actEnd[0], patient))
+        if requestData["requestReturn"][patient] != -1:
+            vehicleTripsAux[actVehicle[1]].append((requestData["requestDestination"][patient], actStart[1], patient))
+            vehicleTripsAux[actVehicle[1]].append((requestData["requestReturn"][patient], actEnd[1], patient))
     
     onboardPatients = set()
     for vehicle in vehicleTripsAux:
+        if not vehicleTripsAux[vehicle]:
+            continue
         vehicleTripsAux[vehicle].sort(key=lambda x: x[1]) # sort by arrival time
         # trip tuple ~ (origin, destination, arrival, patients)
         (origin, arrival, patient) = vehicleTripsAux[vehicle].pop(0)
