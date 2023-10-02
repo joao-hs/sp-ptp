@@ -84,6 +84,19 @@ output ["activityEnd = ", show(activityEnd), "\n"];
 output ["activityExecutionStatus = ", show(activityExecutionStatus), "\n"];
 output ["activityVehicle = ", show(activityVehicle), "\n"];
 
+% Constraints
+
+% N-1. Given the boolean sameVehicleBackward, we need to ensure it is satisfied
+
+constraint sameVehicleBackward -> forall (i in 1..noRequests)(activityVehicle[i, Forward] = activityVehicle[i, Backward]);
+
+
+% N. Allow one-trip requests to be granted
+% - We'll assume that the activity execution status is 1 for the trip that isn't done.
+
+constraint forall (i in 1..noRequests where requestReturn[i] = -1) (activityExecutionStatus[i, Backward] = 1);
+constraint forall (i in 1..noRequests where requestStart[i] = -1) (activityExecutionStatus[i, Forward] = 1);
+
 
 
 % ----------------------------------------------
