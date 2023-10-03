@@ -26,6 +26,7 @@ array [1..noRequests] of int : requestServiceStartTime;
 array [1..noRequests] of int : requestServiceDuration;
 array [1..noRequests] of int : requestCategory;
 array [1..noRequests] of int : requestBoardingDuration;
+array [1..noRequests] of int : requestMaxTravelTime; % added this array I believe we need
 
 array [1..noPlaces, 1..noPlaces] of int : distMatrix;
 
@@ -85,6 +86,36 @@ output ["activityExecutionStatus = ", show(activityExecutionStatus), "\n"];
 output ["activityVehicle = ", show(activityVehicle), "\n"];
 
 % Constraints
+
+% Binding Requests to Activities
+% Maybe  this one isn't necessary since you did it above
+
+constraint forall(i in 1..noRequests) (activityExecutionStatus[i, Forward] /\ activityExecutionStatus[i, Backward]) 
+
+% Forward and Backward Selection
+
+
+constraint forall(i in 1..noRequests) (activityExecutionStatus[i, Forward] = activityExecutionStatus[i, Backward])
+
+% Inter-Activity Time Travel Consistency
+% might something in between each constraint or to create 4 different ones. And not sure what srv is supposed to be I think it's what I wrote maybe it's requestBoardingDuration
+
+constraint forall(i, j in 1..noRequests /\ t in ActivityType where i != j /\ activityVehicle[i, t] = activityVehicle[j, t] ) (
+    activityStart[j, t] - activityStart[i, t] >= distMatrix[requestStart[i], requestStart[j]] + requestServiceDuration[i] \/ activityStart[i, t] - activityStart[j, t] >= distMatrix[requestStart[j], requestStart[i]] + requestServiceDuration[j]
+    activityStart[j, t] - activityEnd[i, t] >= distMatrix[requestStart[i], requestDestination[j]] \/ activityEnd[i, t] - activityStart[j, t] >= distMatrix[requestDestination[j], requestStart[i]] + requestServiceDuration[j] + requestServiceDuration[i]
+    activityEnd[j, t] - activityStart[i, t] >= distMatrix[requestDestination[i], requestStart[j]] + requestServiceDuration[i] + requestServiceDuration[j] \/ activityStart[i, t] - activityEnd[j, t] >= distMatrix[requestStart[j], requestDestination[i]]
+    activityEnd[j, t] - activityEnd[i, t] >= distMatrix[requestDestination[i], requestDestination[j]] + requestServiceDuration[j] \/ activityEnd[i, t] - activityEnd[j, t] >= distMatrix[requestDestination[j], requestDestination[i]] + requestServiceDuration[i]
+)
+
+% Intra-Activity Time Travel Consistency
+
+
+constraint forall(i in 1..noRequests) (activityDuration[i] >= distMatrix[requestStart[i], requestDestination[i]] )
+
+% Maximum Travel Time
+
+
+constraint forall(i in 1..noRequests) (activityDuration[i] <= requestMaxTravelTime[i])
 
 % N-1. Given the boolean sameVehicleBackward, we need to ensure it is satisfied
 
