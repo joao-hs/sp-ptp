@@ -43,9 +43,9 @@ requestCategory = [1, 1]
 requestBoardingDuration = [2, 2]
 distMatrix = [0, 20, 135, 15, 5, 20, 0, 125, 5, 15, 135, 125, 0, 120, 140, 15, 5, 120, 0, 20, 5, 15, 140, 20, 0]
 grantedRequests = 2
-activityStart = [540, 757, 562, 810]
-activityDuration = [15, 15, 15, 15]
-activityEnd = [555, 772, 577, 825]
+activityStart = [540, 727, 562, 780]
+activityDuration = [148, 15, 156, 15]
+activityEnd = [688, 742, 718, 795]
 activityExecutionStatus = [true, true, true, true]
 activityVehicle = [1, 1, 1, 1]
 
