@@ -1,0 +1,66 @@
+OUTPUT FOR TEST: custom_toy_example------------------
+=============== DATA INPUT TO MINIZINC ===============
+sameVehicleBackward: False
+maxWaitTime: 30
+noPlaces: 5
+placeCategory: ['MedicalCenter', 'MedicalCenter', 'VehicleDepot', 'PatientLocation', 'PatientLocation']
+noVehicles: 1
+noCategories: 1
+vehicleCanTake: [[True]]
+vehicleStart: [3]
+vehicleEnd: [3]
+vehicleCapacity: [2]
+vehicleAvailability: [[420, 1200]]
+noRequests: 2
+requestStart: [4, 5]
+requestDestination: [1, 2]
+requestReturn: [4, 5]
+requestLoad: [1, 1]
+requestServiceStartTime: [720, 750]
+requestServiceDuration: [7, 30]
+requestCategory: [1, 1]
+requestBoardingDuration: [2, 2]
+distMatrix: [[0, 20, 135, 15, 5], [20, 0, 125, 5, 15], [135, 125, 0, 120, 140], [15, 5, 120, 0, 20], [5, 15, 140, 20, 0]]
+======================================================
+sameVehicleBackward = false
+maxWaitTime = 30
+noPlaces = 5
+placeCategory = [MedicalCenter, MedicalCenter, VehicleDepot, PatientLocation, PatientLocation]
+noVehicles = 1
+vehicleCanTake = [true]
+vehicleStart = [3]
+vehicleEnd = [3]
+vehicleCapacity = [2]
+vehicleAvailability = [420, 1200]
+noRequests = 2
+requestStart = [4, 5]
+requestDestination = [1, 2]
+requestReturn = [4, 5]
+requestLoad = [1, 1]
+requestServiceStartTime = [720, 750]
+requestServiceDuration = [7, 30]
+requestCategory = [1, 1]
+requestBoardingDuration = [2, 2]
+distMatrix = [0, 20, 135, 15, 5, 20, 0, 125, 5, 15, 135, 125, 0, 120, 140, 15, 5, 120, 0, 20, 5, 15, 140, 20, 0]
+grantedRequests = 2
+activityStart = [540, 757, 562, 810]
+activityDuration = [15, 15, 15, 15]
+activityEnd = [555, 772, 577, 825]
+activityExecutionStatus = [true, true, true, true]
+activityVehicle = [1, 1, 1, 1]
+
+{'requestStart': [4, 5], 'requestDestination': [1, 2], 'requestReturn': [4, 5], 'requestLoad': [1, 1], 'requestServiceStartTime': [720, 750], 'requestServiceDuration': [7, 30], 'requestCategory': [1, 1], 'requestBoardingDuration': [2, 2]}
+0 540 555 1 0
+forwardStart 0 3 540 0
+forwardEnd 0 0 555 0
+1 757 772 1 0
+backwardStart 0 0 757 0
+backwardEnd 0 3 772 0
+2 562 577 1 1
+forwardStart 1 4 562 1
+forwardEnd 1 1 577 1
+3 810 825 1 1
+backwardStart 1 1 810 1
+backwardEnd 1 4 825 1
+[(3, 540, 0), (0, 555, 0), (4, 562, 1), (1, 577, 1), (0, 757, 0), (3, 772, 0), (1, 810, 1), (4, 825, 1)]
+TEST DONE ---------------------------------------------------

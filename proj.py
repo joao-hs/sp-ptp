@@ -20,50 +20,62 @@ def get_place_category(place : int) -> str:
     return "MedicalCenter" if place == 0 else "VehicleDepot" if place == 1 else "PatientLocation"
 
 # Aggregates the output of the model into a list of trips by vehicle
-# TODO: missing special cases (e.g. no returns, no forward activity, etc.)
-#   it might be done :)
 def get_trips_by_vehicle(activityStart : list, activityEnd : list, activityVehicle: list) -> dict:
-    global noVehicles, noRequests
+    global noVehicles, noTrueVehicles, noRequests
 
     vehicleTripsAux = {i:list() for i in range(noVehicles)}
 
     # auxiliary tuple ~ (location, arrival, associatedPatient)
     vehicleTrips = {
-        i: list() for i in range(noVehicles)
+        i: list() for i in range(noTrueVehicles)
     }
-    for patient, (actStart, actEnd, actVehicle) in enumerate(zip(activityStart, activityEnd, activityVehicle)):
-        if requestData["requestStart"][patient] != -1:
-            vehicleTripsAux[actVehicle[0]].append((requestData["requestStart"][patient], actStart[0], patient))
-            vehicleTripsAux[actVehicle[0]].append((requestData["requestDestination"][patient], actEnd[0], patient))
-        if requestData["requestReturn"][patient] != -1:
-            vehicleTripsAux[actVehicle[1]].append((requestData["requestDestination"][patient], actStart[1], patient))
-            vehicleTripsAux[actVehicle[1]].append((requestData["requestReturn"][patient], actEnd[1], patient))
-    
+    print(requestData)
+    for partialActivity, (actStart, actEnd, actVehicle) in enumerate(zip(activityStart, activityEnd, activityVehicle)):
+        patient = partialActivity // 2
+        print(partialActivity, actStart, actEnd, actVehicle, patient)
+        if partialActivity % 2 == 0: # forward
+            if requestData["requestStart"][patient] != -1:
+                print("forwardStart", patient, requestData["requestStart"][patient]-1, actStart, patient)
+                print("forwardEnd", patient, requestData["requestDestination"][patient]-1, actEnd, patient)
+                vehicleTripsAux[actVehicle-1].append((requestData["requestStart"][patient]-1, actStart, patient)) 
+                vehicleTripsAux[actVehicle-1].append((requestData["requestDestination"][patient]-1, actEnd, patient))               
+        else: # backward
+            if requestData["requestReturn"][patient] != -1:
+                print("backwardStart", patient, requestData["requestDestination"][patient]-1, actStart, patient)
+                print("backwardEnd", patient, requestData["requestReturn"][patient]-1, actEnd, patient)
+                vehicleTripsAux[actVehicle-1].append((requestData["requestDestination"][patient]-1, actStart, patient))
+                vehicleTripsAux[actVehicle-1].append((requestData["requestReturn"][patient]-1, actEnd, patient))
+
+
     onboardPatients = set()
-    for vehicle in vehicleTripsAux:
-        if not vehicleTripsAux[vehicle]:
-            continue
-        vehicleTripsAux[vehicle].sort(key=lambda x: x[1]) # sort by arrival time
+    for vehicleIndex in range(noTrueVehicles):
+        tripsForVehicle = [trip 
+                           for vehicleShift in range(vehiclesIdToIndexRange[vehiclesIndexToId[vehicleIndex]][0], vehiclesIdToIndexRange[vehiclesIndexToId[vehicleIndex]][1]+1) 
+                            for trip in vehicleTripsAux[vehicleShift]]
+        tripsForVehicle.sort(key=lambda x: x[1])
+
+        print(tripsForVehicle)
+        # vehicleTripsAux[vehicle].sort(key=lambda x: x[1]) # sort by arrival time
         # trip tuple ~ (origin, destination, arrival, patients)
-        (origin, arrival, patient) = vehicleTripsAux[vehicle].pop(0)
-        vehicleTrips[vehicle].append((0, origin, arrival, set())) # first trip is from vehicle start to first patient
+        (origin, arrival, patient) = tripsForVehicle.pop(0)
+        vehicleTrips[vehicleIndex].append((vehicleData["vehicleStart"][vehicleIndex]-1, origin, arrival, set())) # first trip is from vehicle start to first patient
         onboardPatients.add(patient) # first patient gets onboard
         
-        while vehicleTripsAux[vehicle]:
-            (destination, arrival, patient) = vehicleTripsAux[vehicle].pop(0)
-            vehicleTrips[vehicle].append((origin, destination, arrival, onboardPatients.copy()))
+        while tripsForVehicle:
+            (destination, arrival, patient) = tripsForVehicle.pop(0)
+            vehicleTrips[vehicleIndex].append((origin, destination, arrival, onboardPatients.copy()))
             if patient in onboardPatients: # if the activity is associated with the patient and they are onboard, they are now offboarding
                 onboardPatients.remove(patient)
             else: # otherwise, they are now onboarding
                 onboardPatients.add(patient)
             origin=destination # the next origin is the current destination
         
-        vehicleTrips[vehicle].append((
+        vehicleTrips[vehicleIndex].append((
             origin, 
-            vehicleData["vehicleEnd"][vehicle], 
+            vehicleData["vehicleEnd"][vehicleIndex]-1,
             arrival+ # last arrival time plus
             requestData["requestBoardingDuration"][patient]+ # the offboarding time of the last patient plus
-            data["distMatrix"][destination][vehicleData["vehicleEnd"][vehicle]], # the time it takes to go from the current location to the vehicle depot
+            data["distMatrix"][destination][vehicleData["vehicleEnd"][vehicleIndex]-1], # the time it takes to go from the current location to the vehicle depot
             onboardPatients.copy() # should be empty
             )) # the last trip is to the vehicle depot
         
@@ -125,6 +137,9 @@ instance = Instance(solver, model)
 #     ]
 # }
 
+placesIndexToId = {index:place["id"] for index, place in enumerate(data["places"])}
+patientsIndexToId = dict()
+
 instance["sameVehicleBackward"] = data["sameVehicleBackward"]
 instance["maxWaitTime"] = get_minutes(data["maxWaitTime"])
 
@@ -132,31 +147,43 @@ noPlaces = len(data["places"])
 instance["noPlaces"] = noPlaces
 instance["placeCategory"] = [get_place_category(place["category"]) for place in data["places"]]
 
-noVehicles = len(data["vehicles"])
+noTrueVehicles = len(data["vehicles"])
+vehicleAvailabilityLenghts = [len(vehicle["availability"]) for vehicle in data["vehicles"]]
+noVehicles = max(vehicleAvailabilityLenghts)*noTrueVehicles
 instance["noVehicles"] = noVehicles
+vehiclesIndexToId = {index:-1 for index in range(noVehicles)}
+vehiclesIdToIndexRange = {vehicle["id"]:(0,0) for vehicle in data["vehicles"]}
+
+noCategories = max([len(vehicle["canTake"]) for vehicle in data["vehicles"]])
+instance["noCategories"] = noCategories
 
 vehicleData = dict(
-    vehicleCanTake = [0]*noVehicles,
+    vehicleCanTake = [[False]*noCategories]*noVehicles,
     vehicleStart = [0]*noVehicles,
     vehicleEnd = [0]*noVehicles,
     vehicleCapacity = [0]*noVehicles,
-    vehicleAvailability = [[[0,0]]]*noVehicles,
+    vehicleAvailability = [[0,0]]*noVehicles,
 )
 
-noShifts = 0
-noCategories = 0
+nextIndex = 0
 
-for index, vehicle in enumerate(data["vehicles"]):
-    vehicleData["vehicleCanTake"][index] = vehicle["canTake"]
-    noCategories = max(noCategories, len(vehicle["canTake"]))
-    vehicleData["vehicleStart"][index] = vehicle["start"]
-    vehicleData["vehicleEnd"][index] = vehicle["end"]
-    vehicleData["vehicleCapacity"][index] = vehicle["capacity"]
-    vehicleData["vehicleAvailability"][index] = [get_availability(i) for i in vehicle["availability"]]
-    noShifts = max(noShifts, len(vehicle["availability"]))
+for vehicle in data["vehicles"]:
+    commonId = vehicle["id"]
+    commonCanTake = [True for i in range(noCategories) if i in vehicle["canTake"]]
+    commonStart = vehicle["start"]+1
+    commonEnd = vehicle["end"]+1
+    commonCapacity = vehicle["capacity"]
+    firstVehicleIndex = nextIndex
+    for index, availability in enumerate(vehicle["availability"]):
+        vehiclesIndexToId[nextIndex + index] = commonId
+        vehicleData["vehicleCanTake"][nextIndex + index] = commonCanTake
+        vehicleData["vehicleStart"][nextIndex + index] = commonStart
+        vehicleData["vehicleEnd"][nextIndex + index] = commonEnd
+        vehicleData["vehicleCapacity"][nextIndex + index] = commonCapacity
+        vehicleData["vehicleAvailability"][nextIndex + index] = get_availability(availability)
+    vehiclesIdToIndexRange[commonId] = (firstVehicleIndex, nextIndex+index)
+    nextIndex += index + 1
 
-instance["noShifts"] = noShifts
-instance["noCategories"] = noCategories
 
 for key in vehicleData:
     instance[key] = vehicleData[key]
@@ -176,13 +203,14 @@ requestData = dict(
 )
 
 for index, patient in enumerate(data["patients"]):
-    requestData["requestStart"][index] = patient["start"]
-    requestData["requestDestination"][index] = patient["destination"]
-    requestData["requestReturn"][index] = patient["end"]
+    patientsIndexToId[index] = patient["id"]
+    requestData["requestStart"][index] = patient["start"]+1
+    requestData["requestDestination"][index] = patient["destination"]+1
+    requestData["requestReturn"][index] = patient["end"]+1
     requestData["requestLoad"][index] = patient["load"]
     requestData["requestServiceStartTime"][index] = get_minutes(patient["rdvTime"])
     requestData["requestServiceDuration"][index] = get_minutes(patient["rdvDuration"])
-    requestData["requestCategory"][index] = patient["category"]
+    requestData["requestCategory"][index] = patient["category"]+1
     requestData["requestBoardingDuration"][index] = get_minutes(patient["srvDuration"])
 
 for key in requestData:
@@ -190,6 +218,30 @@ for key in requestData:
 
 instance["distMatrix"] = data["distMatrix"]
 
+
+print("=============== DATA INPUT TO MINIZINC ===============")
+print("sameVehicleBackward:", data["sameVehicleBackward"])
+print("maxWaitTime:", get_minutes(data["maxWaitTime"]))
+print("noPlaces:", noPlaces)
+print("placeCategory:", [get_place_category(place["category"]) for place in data["places"]])
+print("noVehicles:", noVehicles)
+print("noCategories:", noCategories)
+print("vehicleCanTake:", vehicleData["vehicleCanTake"])
+print("vehicleStart:", vehicleData["vehicleStart"])
+print("vehicleEnd:", vehicleData["vehicleEnd"])
+print("vehicleCapacity:", vehicleData["vehicleCapacity"])
+print("vehicleAvailability:", vehicleData["vehicleAvailability"])
+print("noRequests:", noRequests)
+print("requestStart:", requestData["requestStart"])
+print("requestDestination:", requestData["requestDestination"])
+print("requestReturn:", requestData["requestReturn"])
+print("requestLoad:", requestData["requestLoad"])
+print("requestServiceStartTime:", requestData["requestServiceStartTime"])
+print("requestServiceDuration:", requestData["requestServiceDuration"])
+print("requestCategory:", requestData["requestCategory"])
+print("requestBoardingDuration:", requestData["requestBoardingDuration"])
+print("distMatrix:", data["distMatrix"])
+print("======================================================")
 
 # -----------------------------------------------------------------------------
 # --------------------------- Solve & Parse Output ----------------------------
@@ -217,24 +269,24 @@ result = instance.solve()
 
 print(result)
 
-vehicleTrips = get_trips_by_vehicle(result["activityStart"], result["activityEnd"], result["activityVehicle"])
+vehicleTrips = get_trips_by_vehicle(result["activityStart2"], result["activityEnd2"], result["activityVehicle2"])
 
 dump(
     {
         "requests": result["objective"],
         "vehicles": [
             {
-                "id": i,
+                "id": vehiclesIndexToId[i],
                 "trips": [
                     {
-                        "origin": trip[0],
-                        "destination": trip[1],
+                        "origin": placesIndexToId[trip[0]],
+                        "destination": placesIndexToId[trip[1]],
                         "arrival": f"{trip[2]//60}h{trip[2]%60:02d}",
-                        "patients": list(trip[3])
+                        "patients": [patientsIndexToId[patient] for patient in trip[3]]
                     }
                     for trip in vehicleTrips[i]
                 ]
-            } for i in range(noVehicles)
+            } for i in range(noTrueVehicles)
         ]
     },
     fp=output_file

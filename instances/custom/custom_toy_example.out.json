@@ -1,0 +1,72 @@
+{
+    "requests": 2,
+    "vehicles": [
+        {
+            "id": 5,
+            "trips": [
+                {
+                    "origin": 2,
+                    "destination": 3,
+                    "arrival": "9h00",
+                    "patients": []
+                },
+                {
+                    "origin": 3,
+                    "destination": 0,
+                    "arrival": "9h15",
+                    "patients": [
+                        6
+                    ]
+                },
+                {
+                    "origin": 0,
+                    "destination": 4,
+                    "arrival": "9h22",
+                    "patients": []
+                },
+                {
+                    "origin": 4,
+                    "destination": 1,
+                    "arrival": "9h37",
+                    "patients": [
+                        7
+                    ]
+                },
+                {
+                    "origin": 1,
+                    "destination": 0,
+                    "arrival": "12h37",
+                    "patients": []
+                },
+                {
+                    "origin": 0,
+                    "destination": 3,
+                    "arrival": "12h52",
+                    "patients": [
+                        6
+                    ]
+                },
+                {
+                    "origin": 3,
+                    "destination": 1,
+                    "arrival": "13h30",
+                    "patients": []
+                },
+                {
+                    "origin": 1,
+                    "destination": 4,
+                    "arrival": "13h45",
+                    "patients": [
+                        7
+                    ]
+                },
+                {
+                    "origin": 4,
+                    "destination": 2,
+                    "arrival": "16h07",
+                    "patients": []
+                }
+            ]
+        }
+    ]
+}
