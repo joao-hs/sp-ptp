@@ -29,20 +29,14 @@ def get_trips_by_vehicle(activityStart : list, activityEnd : list, activityVehic
     vehicleTrips = {
         i: list() for i in range(noTrueVehicles)
     }
-    print(requestData)
     for partialActivity, (actStart, actEnd, actVehicle) in enumerate(zip(activityStart, activityEnd, activityVehicle)):
         patient = partialActivity // 2
-        print(partialActivity, actStart, actEnd, actVehicle, patient)
         if partialActivity % 2 == 0: # forward
             if requestData["requestStart"][patient] != -1:
-                print("forwardStart", patient, requestData["requestStart"][patient]-1, actStart, patient)
-                print("forwardEnd", patient, requestData["requestDestination"][patient]-1, actEnd, patient)
                 vehicleTripsAux[actVehicle-1].append((requestData["requestStart"][patient]-1, actStart, patient)) 
                 vehicleTripsAux[actVehicle-1].append((requestData["requestDestination"][patient]-1, actEnd, patient))               
         else: # backward
             if requestData["requestReturn"][patient] != -1:
-                print("backwardStart", patient, requestData["requestDestination"][patient]-1, actStart, patient)
-                print("backwardEnd", patient, requestData["requestReturn"][patient]-1, actEnd, patient)
                 vehicleTripsAux[actVehicle-1].append((requestData["requestDestination"][patient]-1, actStart, patient))
                 vehicleTripsAux[actVehicle-1].append((requestData["requestReturn"][patient]-1, actEnd, patient))
 
@@ -54,11 +48,10 @@ def get_trips_by_vehicle(activityStart : list, activityEnd : list, activityVehic
                             for trip in vehicleTripsAux[vehicleShift]]
         tripsForVehicle.sort(key=lambda x: x[1])
 
-        print(tripsForVehicle)
         # vehicleTripsAux[vehicle].sort(key=lambda x: x[1]) # sort by arrival time
         # trip tuple ~ (origin, destination, arrival, patients)
         (origin, arrival, patient) = tripsForVehicle.pop(0)
-        vehicleTrips[vehicleIndex].append((vehicleData["vehicleStart"][vehicleIndex]-1, origin, arrival, set())) # first trip is from vehicle start to first patient
+        vehicleTrips[vehicleIndex].append((vehicleData["vehicleStart"][vehicleIndex]-1, origin, arrival-requestData["requestBoardingDuration"][patient], set())) # first trip is from vehicle start to first patient
         onboardPatients.add(patient) # first patient gets onboard
         
         while tripsForVehicle:
@@ -269,7 +262,7 @@ result = instance.solve()
 
 print(result)
 
-vehicleTrips = get_trips_by_vehicle(result["activityStart2"], result["activityEnd2"], result["activityVehicle2"])
+vehicleTrips = get_trips_by_vehicle(result["activityStart"], result["activityEnd"], result["activityVehicle"])
 
 dump(
     {
