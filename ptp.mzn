@@ -134,7 +134,7 @@ constraint forall(i in 1..noActivities where isForward(i)) (activityExecutionSta
 
 % constraint forall(i in 1..noRequests) (activityExecutionStatusOld[i, Forward] = activityExecutionStatusOld[i, Backward]);
 
-constraint forall(i in 1..noActivities where isForward(i)) (activityExecutionStatus[i] = activityExecutionStatus[backward(i)]);
+constraint forall(i in 1..noActivities where isForward(i) /\ requestStart[activityRequest(i)] != -1 /\ requestReturn[activityRequest(i)] != -1) (activityExecutionStatus[i] = activityExecutionStatus[backward(i)]);
 
 % Inter-Activity Time Travel Consistency
 % might something in between each constraint or to create 4 different ones. And not sure what srv is supposed to be I think it's what I wrote maybe it's requestBoardingDuration
@@ -206,18 +206,34 @@ constraint forall(i in 1..noActivities) (
   (
     isForward(i) /\
     (
-      (activityStart[i] in 0..(requestServiceStartTime[activityRequest(i)]-maxWaitTime))
+      (activityStart[i] in 
+        0
+        ..
+        (requestServiceStartTime[activityRequest(i)]-distMatrix[requestStart[activityRequest(i)], requestDestination[activityRequest(i)]]-requestBoardingDuration[activityRequest(i)]-maxWaitTime)
+      )
       /\
-      (activityEnd[i] in 0..(requestServiceStartTime[activityRequest(i)]-maxWaitTime))
+      (activityEnd[i] in 
+        (requestServiceStartTime[activityRequest(i)]-maxWaitTime-requestBoardingDuration[activityRequest(i)])
+        ..
+        (requestServiceStartTime[activityRequest(i)]-requestBoardingDuration[activityRequest(i)])
+      )
     )
   ) 
   \/
   (
     isBackward(i) /\
     (
-      (activityStart[i] in (requestServiceStartTime[activityRequest(i)]+requestServiceDuration[activityRequest(i)]+maxWaitTime)..DAY_IN_MINUTES)
+      (activityStart[i] in 
+        (requestServiceStartTime[activityRequest(i)]+requestServiceDuration[activityRequest(i)])
+        ..
+        (requestServiceStartTime[activityRequest(i)]+requestServiceDuration[activityRequest(i)]+maxWaitTime)
+      )
       /\
-      (activityEnd[i] in (requestServiceStartTime[activityRequest(i)]+requestServiceDuration[activityRequest(i)]+maxWaitTime)..DAY_IN_MINUTES)
+      (activityEnd[i] in 
+        (activityStart[i]+distMatrix[requestDestination[activityRequest(i)], requestReturn[activityRequest(i)]])
+        ..
+        DAY_IN_MINUTES
+      )
     )
   )
 );
