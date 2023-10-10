@@ -148,7 +148,7 @@ instance["noVehicles"] = noVehicles
 vehiclesIndexToId = {index:-1 for index in range(noVehicles)}
 vehiclesIdToIndexRange = {vehicle["id"]:(0,0) for vehicle in data["vehicles"]}
 
-noCategories = max([len(vehicle["canTake"]) for vehicle in data["vehicles"]])
+noCategories = len({cat for vehicle in data["vehicles"] for cat in vehicle["canTake"]})
 instance["noCategories"] = noCategories
 
 vehicleData = dict(
@@ -163,7 +163,7 @@ nextIndex = 0
 
 for vehicle in data["vehicles"]:
     commonId = vehicle["id"]
-    commonCanTake = [True for i in range(noCategories) if i in vehicle["canTake"]]
+    commonCanTake = [True if i in vehicle["canTake"] else False for i in range(noCategories)]
     commonStart = vehicle["start"]
     commonEnd = vehicle["end"]
     commonCapacity = vehicle["capacity"]
