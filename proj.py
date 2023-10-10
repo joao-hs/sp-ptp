@@ -46,6 +46,9 @@ def get_trips_by_vehicle(activityStart : list, activityEnd : list, activityVehic
         tripsForVehicle = [trip 
                            for vehicleShift in range(vehiclesIdToIndexRange[vehiclesIndexToId[vehicleIndex]][0], vehiclesIdToIndexRange[vehiclesIndexToId[vehicleIndex]][1]+1) 
                             for trip in vehicleTripsAux[vehicleShift]]
+        if not tripsForVehicle:
+            continue
+        
         tripsForVehicle.sort(key=lambda x: x[1])
 
         # vehicleTripsAux[vehicle].sort(key=lambda x: x[1]) # sort by arrival time
