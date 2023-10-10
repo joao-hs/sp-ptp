@@ -11,6 +11,7 @@ int : noPlaces;
 enum PlaceCategory = {MedicalCenter, VehicleDepot, PatientLocation};
 array [0..noPlaces-1] of PlaceCategory : placeCategory;
 
+int : noOriginalVehicles;
 int : noVehicles;
 int : noCategories;
 enum ShiftPos = {ShiftStart, ShiftEnd};
@@ -19,6 +20,7 @@ array [0..noVehicles-1] of int : vehicleStart;
 array [0..noVehicles-1] of int : vehicleEnd;
 array [0..noVehicles-1] of int : vehicleCapacity;
 array [0..noVehicles-1, ShiftPos] of int : vehicleAvailability;
+array [0..noVehicles-1] of int : expandedToOriginalVehicle;
 
 int : noRequests;
 int : noActivities = 2*noRequests;
@@ -84,13 +86,7 @@ test happensForward(int: activity) = requestStart[activityRequest(activity)] != 
 test happensBackward(int: activity) = requestReturn[activityRequest(activity)] != -1;
 test isTwoWayTrip(int: activity) = (requestStart[activityRequest(activity)] != -1 /\ requestReturn[activityRequest(backward(activity))] != -1);
 
-% array [0..noRequests-1, ActivityType] of var 0..DAY_IN_MINUTES : activityStartOld;
-% array [0..noRequests-1, ActivityType] of var 0..DAY_IN_MINUTES : activityDurationOld;
-% array [0..noRequests-1, ActivityType] of var 0..DAY_IN_MINUTES : activityEndOld;
-% array [0..noRequests-1, ActivityType] of var bool : activityExecutionStatusOld;
-% array [0..noRequests-1, ActivityType] of var 0..noVehicles-1 : activityVehicleOld;
-
-var 1..noRequests : grantedRequests = count(i in 0..noActivities-1 where isForward(i))(activityExecutionStatus[i] /\ activityExecutionStatus[backward(i)]);
+var 0..noRequests : grantedRequests = count(i in 0..noActivities-1 where isForward(i))(activityExecutionStatus[i] /\ activityExecutionStatus[backward(i)]);
 
 solve maximize grantedRequests;
 
@@ -111,7 +107,7 @@ constraint forall (i in 0..noActivities-1) (
     (isForward(i)) /\
     (activityStart[i] in 0..requestServiceStartTime[activityRequest(i)]) /\
     (activityEnd[i] in 0..requestServiceStartTime[activityRequest(i)]) /\
-    (activityDuration[i] = activityEnd[i] - activityStart[i]) /\
+    (activityDuration[i] == activityEnd[i] - activityStart[i]) /\
     (activityVehicle[i] in {v | v in 0..noVehicles-1 where vehicleCanTake[v, requestCategory[activityRequest(i)]]})
   )
   
@@ -121,7 +117,7 @@ constraint forall (i in 0..noActivities-1) (
     (isBackward(i)) /\
     (activityStart[i] in (requestServiceStartTime[activityRequest(i)]+requestServiceDuration[activityRequest(i)])..DAY_IN_MINUTES) /\
     (activityEnd[i] in (requestServiceStartTime[activityRequest(i)]+requestServiceDuration[activityRequest(i)])..DAY_IN_MINUTES) /\
-    (activityDuration[i] = activityEnd[i] - activityStart[i]) /\
+    (activityDuration[i] == activityEnd[i] - activityStart[i]) /\
     (activityVehicle[i] in {v | v in 0..noVehicles-1 where vehicleCanTake[v, requestCategory[activityRequest(i)]]})
   )
 );
@@ -150,19 +146,19 @@ constraint forall(i in 0..noActivities-1 where isForward(i) /\ isTwoWayTrip(i)) 
 %         \/ activityEnd[i] - activityEnd[j] >= distMatrix[requestDestination[activityRequest(j)], requestDestination[activityRequest(i)]] + requestBoardingDuration[activityRequest(i)])))
 % );
 
-constraint forall(i, j in 0..noActivities-1 where i != j /\ i != backward(j) /\ j != backward(i) /\ activityVehicle[i] = activityVehicle[j] /\ happensForward(i) /\ happensForward(j)) (
+constraint forall(i, j in 0..noActivities-1 where i != j /\ i != backward(j) /\ j != backward(i) /\ expandedToOriginalVehicle[activityVehicle[i]] = expandedToOriginalVehicle[activityVehicle[j]] /\ happensForward(i) /\ happensForward(j)) (
     ((activityStart[j] - activityStart[i] >= distMatrix[requestStart[activityRequest(i)], requestStart[activityRequest(j)]] + requestBoardingDuration[activityRequest(i)]
         \/ activityStart[i] - activityStart[j] >= distMatrix[requestStart[activityRequest(j)], requestStart[activityRequest(i)]] + requestBoardingDuration[activityRequest(j)]))
 );
-constraint forall(i, j in 0..noActivities-1 where i != j /\ i != backward(j) /\ j != backward(i) /\ activityVehicle[i] = activityVehicle[j] /\ happensForward(i)) (
+constraint forall(i, j in 0..noActivities-1 where i != j /\ i != backward(j) /\ j != backward(i) /\ expandedToOriginalVehicle[activityVehicle[i]] = expandedToOriginalVehicle[activityVehicle[j]] /\ happensForward(i)) (
     ((activityStart[j] - activityEnd[i] >= distMatrix[requestStart[activityRequest(i)], requestDestination[activityRequest(j)]]                                                           
         \/ activityEnd[i] - activityStart[j] >= distMatrix[requestDestination[activityRequest(j)], requestStart[activityRequest(i)]] + requestBoardingDuration[activityRequest(j)] + requestBoardingDuration[activityRequest(i)]))
 );
-constraint forall(i, j in 0..noActivities-1 where i != j /\ i != backward(j) /\ j != backward(i) /\ activityVehicle[i] = activityVehicle[j] /\ happensForward(j)) (
+constraint forall(i, j in 0..noActivities-1 where i != j /\ i != backward(j) /\ j != backward(i) /\ expandedToOriginalVehicle[activityVehicle[i]] = expandedToOriginalVehicle[activityVehicle[j]] /\ happensForward(j)) (
     ((activityEnd[j] - activityStart[i] >= distMatrix[requestDestination[activityRequest(i)], requestStart[activityRequest(j)]] + requestBoardingDuration[activityRequest(i)] + requestBoardingDuration[activityRequest(j)]
         \/ activityStart[i] - activityEnd[j] >= distMatrix[requestStart[activityRequest(j)], requestDestination[activityRequest(i)]]))
 );
-constraint forall(i, j in 0..noActivities-1 where i != j /\ i != backward(j) /\ j != backward(i) /\ activityVehicle[i] = activityVehicle[j]) (
+constraint forall(i, j in 0..noActivities-1 where i != j /\ i != backward(j) /\ j != backward(i) /\ expandedToOriginalVehicle[activityVehicle[i]] = expandedToOriginalVehicle[activityVehicle[j]]) (
     ((activityEnd[j] - activityEnd[i] >= distMatrix[requestDestination[activityRequest(i)], requestDestination[activityRequest(j)]] + requestBoardingDuration[activityRequest(j)]
         \/ activityEnd[i] - activityEnd[j] >= distMatrix[requestDestination[activityRequest(j)], requestDestination[activityRequest(i)]] + requestBoardingDuration[activityRequest(i)]))
 );
@@ -263,7 +259,7 @@ constraint forall (i in 0..noActivities-1) (
 
 % 7. Given the boolean sameVehicleBackward, we need to ensure it is satisfied
 
-constraint sameVehicleBackward -> forall (i in 0..noActivities-1 where isForward(i)) (activityVehicle[i] = activityVehicle[backward(i)]);
+constraint sameVehicleBackward -> forall (i in 0..noActivities-1 where isForward(i)) (expandedToOriginalVehicle[activityVehicle[i]] == expandedToOriginalVehicle[activityVehicle[backward(i)]]);
 
 
 % 8. Allow one-trip requests to be granted

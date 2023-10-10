@@ -1,6 +1,6 @@
 from json import load, dump
 from sys import argv
-from minizinc import Model, Solver, Instance
+from minizinc import Model, Solver, Instance, Status
 
 
 # -----------------------------------------------------------------------------
@@ -145,6 +145,7 @@ instance["noPlaces"] = noPlaces
 instance["placeCategory"] = [get_place_category(place["category"]) for place in data["places"]]
 
 noTrueVehicles = len(data["vehicles"])
+instance["noOriginalVehicles"] = noTrueVehicles
 vehicleAvailabilityLenghts = [len(vehicle["availability"]) for vehicle in data["vehicles"]]
 noVehicles = max(vehicleAvailabilityLenghts)*noTrueVehicles
 instance["noVehicles"] = noVehicles
@@ -160,6 +161,7 @@ vehicleData = dict(
     vehicleEnd = [0]*noVehicles,
     vehicleCapacity = [0]*noVehicles,
     vehicleAvailability = [[0,0]]*noVehicles,
+    expandedToOriginalVehicle = [0]*noVehicles
 )
 
 nextIndex = 0
@@ -178,6 +180,7 @@ for vehicle in data["vehicles"]:
         vehicleData["vehicleEnd"][nextIndex + index] = commonEnd
         vehicleData["vehicleCapacity"][nextIndex + index] = commonCapacity
         vehicleData["vehicleAvailability"][nextIndex + index] = get_availability(availability)
+        vehicleData["expandedToOriginalVehicle"][nextIndex + index] = nextIndex
     vehiclesIdToIndexRange[commonId] = (firstVehicleIndex, nextIndex+index)
     nextIndex += index + 1
 
@@ -244,6 +247,7 @@ dump(
         "maxWaitTime": get_minutes(data["maxWaitTime"]),
         "noPlaces": noPlaces,
         "placeCategory": [get_place_category(place["category"]) for place in data["places"]],
+        "noOriginalVehicles": noTrueVehicles,
         "noVehicles": noVehicles,
         "noCategories": noCategories,
         "vehicleCanTake": vehicleData["vehicleCanTake"],
@@ -251,6 +255,7 @@ dump(
         "vehicleEnd": vehicleData["vehicleEnd"],
         "vehicleCapacity": vehicleData["vehicleCapacity"],
         "vehicleAvailability": vehicleData["vehicleAvailability"],
+        "expandedToOriginalVehicle": vehicleData["expandedToOriginalVehicle"],
         "noRequests": noRequests,
         "requestStart": requestData["requestStart"],
         "requestDestination": requestData["requestDestination"],
@@ -288,7 +293,24 @@ dump(
 # }
 
 
-result = instance.solve()   
+result = instance.solve()
+
+
+if result.status is Status.UNSATISFIABLE:
+    print("UNSATISFIABLE")
+    dump(
+        {
+            "requests": 0,
+            "vehicles": [
+                {
+                    "id": vehiclesIndexToId[i],
+                    "trips": []
+                } for i in range(noTrueVehicles)
+            ]
+        },
+        fp=output_file
+    )
+    exit()
 
 print(result)
 
