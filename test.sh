@@ -8,7 +8,7 @@ if [ -z "$1" ]; then
     echo "Running all tests"
     for f in instances/*/*.in.json; do
         (echo "OUTPUT FOR TEST: $(basename ${f/.in.json/})------------------"
-        python proj.py $f ${f/.in.json/.out.json}
+        python3 proj.py $f ${f/.in.json/.out.json}
         echo "TEST DONE ---------------------------------------------------") > ${f/.in.json/.out} &
     done
     wait
@@ -17,7 +17,7 @@ elif [ $# == 1 ]; then
         echo "Running easy tests"
         for f in instances/easy/*.in.json; do
             (echo "OUTPUT FOR TEST: $(basename ${f/.in.json/})------------------"
-            python proj.py $f ${f/.in.json/.out.json}
+            python3 proj.py $f ${f/.in.json/.out.json}
             echo "TEST DONE ---------------------------------------------------") > ${f/.in.json/.out} &
         done
         wait
@@ -25,7 +25,7 @@ elif [ $# == 1 ]; then
         echo "Running medium tests"
         for f in instances/medium/*.in.json; do
             (echo "OUTPUT FOR TEST: $(basename ${f/.in.json/})------------------"
-            python proj.py $f ${f/.in.json/.out.json}
+            python3 proj.py $f ${f/.in.json/.out.json}
             echo "TEST DONE ---------------------------------------------------")  > ${f/.in.json/.out} &
         done
         wait
@@ -33,7 +33,7 @@ elif [ $# == 1 ]; then
         echo "Running hard tests"
         for f in instances/hard/*.in.json; do
             (echo "OUTPUT FOR TEST: $(basename ${f/.in.json/})------------------"
-            python proj.py $f ${f/.in.json/.out.json}
+            python3 proj.py $f ${f/.in.json/.out.json}
             echo "TEST DONE ---------------------------------------------------")  > ${f/.in.json/.out} &
         done
         wait
@@ -41,14 +41,14 @@ elif [ $# == 1 ]; then
         echo "Running custom tests"
         for f in instances/custom/*.in.json; do
             (echo "OUTPUT FOR TEST: $(basename ${f/.in.json/})------------------"
-            python proj.py $f ${f/.in.json/.out.json}
+            python3 proj.py $f ${f/.in.json/.out.json}
             echo "TEST DONE ---------------------------------------------------")  > ${f/.in.json/.out} &
         done
         wait
     # elif $1.in.json is in instances subdirectories
     elif [ -f instances/*/$1.in.json ]; then
         (echo "OUTPUT FOR TEST: $1 -----------------------------------------"
-        python proj.py instances/${1/_*/}/$1.in.json instances/${1/_*/}/$1.out.json
+        python3 proj.py instances/${1/_*/}/$1.in.json instances/${1/_*/}/$1.out.json
         echo "TEST DONE ---------------------------------------------------") > instances/${1/_*/}/$1.out
     else
         ran_tests=0

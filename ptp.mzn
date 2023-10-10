@@ -81,7 +81,8 @@ function int: backward(int: activity) = activity + 1;
 function int: activityRequest(int: activity) = (activity) div 2;
 test isForward(int: activity) = activity mod 2 == 0;
 test isBackward(int: activity) = activity mod 2 == 1;
-test happens(int: activity) = ((isForward(activity) /\ requestStart[activityRequest(activity)] != -1) \/ (isBackward(activity) /\ requestReturn[activityRequest(activity)] != -1));
+test happensForward(int: activity) = requestStart[activityRequest(activity)] != -1;
+test happensBackward(int: activity) = requestReturn[activityRequest(activity)] != -1;
 test isTwoWayTrip(int: activity) = (requestStart[activityRequest(activity)] != -1 /\ requestReturn[activityRequest(backward(activity))] != -1);
 
 % array [0..noRequests-1, ActivityType] of var 0..DAY_IN_MINUTES : activityStartOld;
@@ -155,17 +156,37 @@ constraint forall(i in 0..noActivities-1 where isForward(i) /\ isTwoWayTrip(i)) 
 %         \/ activityEndOld[i, t] - activityEndOld[j, t] >= distMatrix[requestDestination[j], requestDestination[i]] + requestBoardingDuration[i])
 % );
 
-constraint forall(i, j in 0..noActivities-1 where i != j /\ i != backward(j) /\ j != backward(i) /\ activityVehicle[i] = activityVehicle[j] /\ happens(i) /\ happens(j)) (
+% constraint forall(i, j in 0..noActivities-1 where i != j /\ i != backward(j) /\ j != backward(i) /\ activityVehicle[i] = activityVehicle[j]) (
+%     (happensForward(i) /\ happensForward(j) /\
+%     ((activityStart[j] - activityStart[i] >= distMatrix[requestStart[activityRequest(i)], requestStart[activityRequest(j)]] + requestBoardingDuration[activityRequest(i)]
+%         \/ activityStart[i] - activityStart[j] >= distMatrix[requestStart[activityRequest(j)], requestStart[activityRequest(i)]] + requestBoardingDuration[activityRequest(j)])))
+%     /\
+%     (happensForward(i) /\
+%     ((activityStart[j] - activityEnd[i] >= distMatrix[requestStart[activityRequest(i)], requestDestination[activityRequest(j)]]                                                           
+%         \/ activityEnd[i] - activityStart[j] >= distMatrix[requestDestination[activityRequest(j)], requestStart[activityRequest(i)]] + requestBoardingDuration[activityRequest(j)] + requestBoardingDuration[activityRequest(i)])))
+%     /\
+%     (happensForward(j) /\
+%     ((activityEnd[j] - activityStart[i] >= distMatrix[requestDestination[activityRequest(i)], requestStart[activityRequest(j)]] + requestBoardingDuration[activityRequest(i)] + requestBoardingDuration[activityRequest(j)]
+%         \/ activityStart[i] - activityEnd[j] >= distMatrix[requestStart[activityRequest(j)], requestDestination[activityRequest(i)]]))) 
+%     /\
+%     (((activityEnd[j] - activityEnd[i] >= distMatrix[requestDestination[activityRequest(i)], requestDestination[activityRequest(j)]] + requestBoardingDuration[activityRequest(j)]
+%         \/ activityEnd[i] - activityEnd[j] >= distMatrix[requestDestination[activityRequest(j)], requestDestination[activityRequest(i)]] + requestBoardingDuration[activityRequest(i)])))
+% );
+
+constraint forall(i, j in 0..noActivities-1 where i != j /\ i != backward(j) /\ j != backward(i) /\ activityVehicle[i] = activityVehicle[j] /\ happensForward(i) /\ happensForward(j)) (
     ((activityStart[j] - activityStart[i] >= distMatrix[requestStart[activityRequest(i)], requestStart[activityRequest(j)]] + requestBoardingDuration[activityRequest(i)]
         \/ activityStart[i] - activityStart[j] >= distMatrix[requestStart[activityRequest(j)], requestStart[activityRequest(i)]] + requestBoardingDuration[activityRequest(j)]))
-    
-    /\ ((activityStart[j] - activityEnd[i] >= distMatrix[requestStart[activityRequest(i)], requestDestination[activityRequest(j)]]                                                           
+);
+constraint forall(i, j in 0..noActivities-1 where i != j /\ i != backward(j) /\ j != backward(i) /\ activityVehicle[i] = activityVehicle[j] /\ happensForward(i)) (
+    ((activityStart[j] - activityEnd[i] >= distMatrix[requestStart[activityRequest(i)], requestDestination[activityRequest(j)]]                                                           
         \/ activityEnd[i] - activityStart[j] >= distMatrix[requestDestination[activityRequest(j)], requestStart[activityRequest(i)]] + requestBoardingDuration[activityRequest(j)] + requestBoardingDuration[activityRequest(i)]))
-    
-    /\ ((activityEnd[j] - activityStart[i] >= distMatrix[requestDestination[activityRequest(i)], requestStart[activityRequest(j)]] + requestBoardingDuration[activityRequest(i)] + requestBoardingDuration[activityRequest(j)]
-        \/ activityStart[i] - activityEnd[j] >= distMatrix[requestStart[activityRequest(j)], requestDestination[activityRequest(i)]])) 
-    
-    /\ ((activityEnd[j] - activityEnd[i] >= distMatrix[requestDestination[activityRequest(i)], requestDestination[activityRequest(j)]] + requestBoardingDuration[activityRequest(j)]
+);
+constraint forall(i, j in 0..noActivities-1 where i != j /\ i != backward(j) /\ j != backward(i) /\ activityVehicle[i] = activityVehicle[j] /\ happensForward(j)) (
+    ((activityEnd[j] - activityStart[i] >= distMatrix[requestDestination[activityRequest(i)], requestStart[activityRequest(j)]] + requestBoardingDuration[activityRequest(i)] + requestBoardingDuration[activityRequest(j)]
+        \/ activityStart[i] - activityEnd[j] >= distMatrix[requestStart[activityRequest(j)], requestDestination[activityRequest(i)]]))
+);
+constraint forall(i, j in 0..noActivities-1 where i != j /\ i != backward(j) /\ j != backward(i) /\ activityVehicle[i] = activityVehicle[j]) (
+    ((activityEnd[j] - activityEnd[i] >= distMatrix[requestDestination[activityRequest(i)], requestDestination[activityRequest(j)]] + requestBoardingDuration[activityRequest(j)]
         \/ activityEnd[i] - activityEnd[j] >= distMatrix[requestDestination[activityRequest(j)], requestDestination[activityRequest(i)]] + requestBoardingDuration[activityRequest(i)]))
 );
 
@@ -173,18 +194,18 @@ constraint forall(i, j in 0..noActivities-1 where i != j /\ i != backward(j) /\ 
 
 % constraint forall(i in 0..noRequests-1) (activityDurationOld[i, Forward] >= distMatrix[requestStart[i], requestDestination[i]] /\ activityDurationOld[i, Backward] >= distMatrix[requestDestination[i], requestReturn[i]]);
 
-constraint forall(i in 0..noActivities-1 where isForward(i) /\ happens(i)) (
+constraint forall(i in 0..noActivities-1 where happensForward(i)) (
   (activityDuration[i] >= distMatrix[requestStart[activityRequest(i)], requestDestination[activityRequest(i)]]));
 
-constraint forall(i in 0..noActivities-1 where isForward(i) /\ happens(i)) (
-  (activityDuration[backward(i)] >= distMatrix[requestDestination[activityRequest(i)], requestReturn[activityRequest(i)]]));
+constraint forall(i in 0..noActivities-1 where happensBackward(i)) (
+  (activityDuration[i] >= distMatrix[requestDestination[activityRequest(i)], requestReturn[activityRequest(i)]]));
 % Maximum Travel Time - Don't think this is a constraint for our project
 
 % constraint forall(i in 0..noRequests-1) (activityDurationOld[i] <= maxWaitTime)
 
 % Cumulative Resource
 
-constraint forall(j in 0..noVehicles-1, i in 0..noActivities-1 where activityVehicle[i] = j /\ happens(i)) (
+constraint forall(j in 0..noVehicles-1, i in 0..noActivities-1 where activityVehicle[i] = j /\ (happensForward(i) \/ happensBackward(i))) (
   cumulative(
     activityStart,
     activityDuration,
@@ -205,9 +226,9 @@ constraint forall(j in 0..noVehicles-1, i in 0..noActivities-1 where activityVeh
 % Maximum Waiting Time
 % might be optimizable
 
-constraint forall(i in 0..noActivities-1 where happens(i)) (
+constraint forall(i in 0..noActivities-1) (
   (
-    isForward(i) /\ 
+    happensForward(i) /\ 
     (
       (
         (activityStart[i] in 
@@ -226,7 +247,7 @@ constraint forall(i in 0..noActivities-1 where happens(i)) (
   ) 
   \/
   (
-    isBackward(i) /\ 
+    happensBackward(i) /\ 
     (
       (
         (activityStart[i] in 
@@ -281,9 +302,9 @@ constraint forall(i in 0..noActivities-1 where happens(i)) (
 %   )
 % );
 
-constraint forall (i in 0..noActivities-1 where happens(i)) (
+constraint forall (i in 0..noActivities-1) (
   (
-    isForward(i) /\ 
+    happensForward(i) /\ 
     (
       (
         (activityStart[i] >= 
@@ -298,7 +319,7 @@ constraint forall (i in 0..noActivities-1 where happens(i)) (
   )
   \/
   (
-    isBackward(i) /\ 
+    happensBackward(i) /\ 
     (
       (
         (activityStart[i] >= 
@@ -321,7 +342,7 @@ constraint sameVehicleBackward -> forall (i in 0..noActivities-1 where isForward
 % N. Allow one-trip requests to be granted
 % - We'll assume that the activity execution status is 1 for the trip that isn't done.
 
-constraint forall (i in 0..noActivities-1 where not happens(i)) (activityExecutionStatus[i] = true);
+constraint forall (i in 0..noActivities-1 where not (happensForward(i) \/ happensBackward(i))) (activityExecutionStatus[i] = true);
 
 
 
