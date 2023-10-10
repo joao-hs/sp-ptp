@@ -33,12 +33,12 @@ def get_trips_by_vehicle(activityStart : list, activityEnd : list, activityVehic
         patient = partialActivity // 2
         if partialActivity % 2 == 0: # forward
             if requestData["requestStart"][patient] != -1:
-                vehicleTripsAux[actVehicle-1].append((requestData["requestStart"][patient]-1, actStart, patient)) 
-                vehicleTripsAux[actVehicle-1].append((requestData["requestDestination"][patient]-1, actEnd, patient))               
+                vehicleTripsAux[actVehicle].append((requestData["requestStart"][patient], actStart, patient)) 
+                vehicleTripsAux[actVehicle].append((requestData["requestDestination"][patient], actEnd, patient))               
         else: # backward
             if requestData["requestReturn"][patient] != -1:
-                vehicleTripsAux[actVehicle-1].append((requestData["requestDestination"][patient]-1, actStart, patient))
-                vehicleTripsAux[actVehicle-1].append((requestData["requestReturn"][patient]-1, actEnd, patient))
+                vehicleTripsAux[actVehicle].append((requestData["requestDestination"][patient], actStart, patient))
+                vehicleTripsAux[actVehicle].append((requestData["requestReturn"][patient], actEnd, patient))
 
 
     onboardPatients = set()
@@ -51,7 +51,7 @@ def get_trips_by_vehicle(activityStart : list, activityEnd : list, activityVehic
         # vehicleTripsAux[vehicle].sort(key=lambda x: x[1]) # sort by arrival time
         # trip tuple ~ (origin, destination, arrival, patients)
         (origin, arrival, patient) = tripsForVehicle.pop(0)
-        vehicleTrips[vehicleIndex].append((vehicleData["vehicleStart"][vehicleIndex]-1, origin, arrival-requestData["requestBoardingDuration"][patient], set())) # first trip is from vehicle start to first patient
+        vehicleTrips[vehicleIndex].append((vehicleData["vehicleStart"][vehicleIndex], origin, arrival-requestData["requestBoardingDuration"][patient], set())) # first trip is from vehicle start to first patient
         onboardPatients.add(patient) # first patient gets onboard
         
         while tripsForVehicle:
@@ -65,10 +65,10 @@ def get_trips_by_vehicle(activityStart : list, activityEnd : list, activityVehic
         
         vehicleTrips[vehicleIndex].append((
             origin, 
-            vehicleData["vehicleEnd"][vehicleIndex]-1,
+            vehicleData["vehicleEnd"][vehicleIndex],
             arrival+ # last arrival time plus
             requestData["requestBoardingDuration"][patient]+ # the offboarding time of the last patient plus
-            data["distMatrix"][destination][vehicleData["vehicleEnd"][vehicleIndex]-1], # the time it takes to go from the current location to the vehicle depot
+            data["distMatrix"][destination][vehicleData["vehicleEnd"][vehicleIndex]], # the time it takes to go from the current location to the vehicle depot
             onboardPatients.copy() # should be empty
             )) # the last trip is to the vehicle depot
         
@@ -83,6 +83,7 @@ input_name = argv[1]
 output_name = argv[2]
 
 input_file = open(input_name, 'r')
+input_mnz = open(input_name + ".mzn.json", 'w')
 output_file = open(output_name, 'w')
 
 data = load(input_file)
@@ -163,8 +164,8 @@ nextIndex = 0
 for vehicle in data["vehicles"]:
     commonId = vehicle["id"]
     commonCanTake = [True for i in range(noCategories) if i in vehicle["canTake"]]
-    commonStart = vehicle["start"]+1
-    commonEnd = vehicle["end"]+1
+    commonStart = vehicle["start"]
+    commonEnd = vehicle["end"]
     commonCapacity = vehicle["capacity"]
     firstVehicleIndex = nextIndex
     for index, availability in enumerate(vehicle["availability"]):
@@ -197,13 +198,13 @@ requestData = dict(
 
 for index, patient in enumerate(data["patients"]):
     patientsIndexToId[index] = patient["id"]
-    requestData["requestStart"][index] = patient["start"]+1
-    requestData["requestDestination"][index] = patient["destination"]+1
-    requestData["requestReturn"][index] = patient["end"]+1
+    requestData["requestStart"][index] = patient["start"]
+    requestData["requestDestination"][index] = patient["destination"]
+    requestData["requestReturn"][index] = patient["end"]
     requestData["requestLoad"][index] = patient["load"]
     requestData["requestServiceStartTime"][index] = get_minutes(patient["rdvTime"])
     requestData["requestServiceDuration"][index] = get_minutes(patient["rdvDuration"])
-    requestData["requestCategory"][index] = patient["category"]+1
+    requestData["requestCategory"][index] = patient["category"]
     requestData["requestBoardingDuration"][index] = get_minutes(patient["srvDuration"])
 
 for key in requestData:
@@ -212,29 +213,55 @@ for key in requestData:
 instance["distMatrix"] = data["distMatrix"]
 
 
-print("=============== DATA INPUT TO MINIZINC ===============")
-print("sameVehicleBackward:", data["sameVehicleBackward"])
-print("maxWaitTime:", get_minutes(data["maxWaitTime"]))
-print("noPlaces:", noPlaces)
-print("placeCategory:", [get_place_category(place["category"]) for place in data["places"]])
-print("noVehicles:", noVehicles)
-print("noCategories:", noCategories)
-print("vehicleCanTake:", vehicleData["vehicleCanTake"])
-print("vehicleStart:", vehicleData["vehicleStart"])
-print("vehicleEnd:", vehicleData["vehicleEnd"])
-print("vehicleCapacity:", vehicleData["vehicleCapacity"])
-print("vehicleAvailability:", vehicleData["vehicleAvailability"])
-print("noRequests:", noRequests)
-print("requestStart:", requestData["requestStart"])
-print("requestDestination:", requestData["requestDestination"])
-print("requestReturn:", requestData["requestReturn"])
-print("requestLoad:", requestData["requestLoad"])
-print("requestServiceStartTime:", requestData["requestServiceStartTime"])
-print("requestServiceDuration:", requestData["requestServiceDuration"])
-print("requestCategory:", requestData["requestCategory"])
-print("requestBoardingDuration:", requestData["requestBoardingDuration"])
-print("distMatrix:", data["distMatrix"])
-print("======================================================")
+# print("=============== DATA INPUT TO MINIZINC ===============")
+# print("sameVehicleBackward:", data["sameVehicleBackward"])
+# print("maxWaitTime:", get_minutes(data["maxWaitTime"]))
+# print("noPlaces:", noPlaces)
+# print("placeCategory:", [get_place_category(place["category"]) for place in data["places"]])
+# print("noVehicles:", noVehicles)
+# print("noCategories:", noCategories)
+# print("vehicleCanTake:", vehicleData["vehicleCanTake"])
+# print("vehicleStart:", vehicleData["vehicleStart"])
+# print("vehicleEnd:", vehicleData["vehicleEnd"])
+# print("vehicleCapacity:", vehicleData["vehicleCapacity"])
+# print("vehicleAvailability:", vehicleData["vehicleAvailability"])
+# print("noRequests:", noRequests)
+# print("requestStart:", requestData["requestStart"])
+# print("requestDestination:", requestData["requestDestination"])
+# print("requestReturn:", requestData["requestReturn"])
+# print("requestLoad:", requestData["requestLoad"])
+# print("requestServiceStartTime:", requestData["requestServiceStartTime"])
+# print("requestServiceDuration:", requestData["requestServiceDuration"])
+# print("requestCategory:", requestData["requestCategory"])
+# print("requestBoardingDuration:", requestData["requestBoardingDuration"])
+# print("distMatrix:", data["distMatrix"])
+dump(
+    {
+        "sameVehicleBackward": data["sameVehicleBackward"],
+        "maxWaitTime": get_minutes(data["maxWaitTime"]),
+        "noPlaces": noPlaces,
+        "placeCategory": [get_place_category(place["category"]) for place in data["places"]],
+        "noVehicles": noVehicles,
+        "noCategories": noCategories,
+        "vehicleCanTake": vehicleData["vehicleCanTake"],
+        "vehicleStart": vehicleData["vehicleStart"],
+        "vehicleEnd": vehicleData["vehicleEnd"],
+        "vehicleCapacity": vehicleData["vehicleCapacity"],
+        "vehicleAvailability": vehicleData["vehicleAvailability"],
+        "noRequests": noRequests,
+        "requestStart": requestData["requestStart"],
+        "requestDestination": requestData["requestDestination"],
+        "requestReturn": requestData["requestReturn"],
+        "requestLoad": requestData["requestLoad"],
+        "requestServiceStartTime": requestData["requestServiceStartTime"],
+        "requestServiceDuration": requestData["requestServiceDuration"],
+        "requestCategory": requestData["requestCategory"],
+        "requestBoardingDuration": requestData["requestBoardingDuration"],
+        "distMatrix": data["distMatrix"]
+    },
+    fp=input_mnz
+)
+# print("======================================================")
 
 # -----------------------------------------------------------------------------
 # --------------------------- Solve & Parse Output ----------------------------
