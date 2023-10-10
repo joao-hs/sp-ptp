@@ -65,7 +65,6 @@ output ["distMatrix = ", show(distMatrix), "\n"];
 % Support for decision variables
 
 int : DAY_IN_MINUTES = 1440; % 24 hours in minutes
-% enum ActivityType = {Forward, Backward};
 
 
 % Decision Variables
@@ -102,8 +101,11 @@ output ["activityEnd = ", show(activityEnd), "\n"];
 output ["activityExecutionStatus = ", show(activityExecutionStatus), "\n"];
 output ["activityVehicle = ", show(activityVehicle), "\n"];
 
-% Specific domains as constraints
+% Constraints
+
+% 0. Specific domains as constraints
 % Might be optimizable
+
 constraint forall (i in 0..noActivities-1) (
   (
     (isForward(i)) /\
@@ -124,37 +126,12 @@ constraint forall (i in 0..noActivities-1) (
   )
 );
 
-% Constraints
-
-% Binding Requests to Activities
-% Maybe  this one isn't necessary since you did it above
-
-% constraint forall(i in 0..noRequests-1) (activityExecutionStatusOld[i, Forward] /\ activityExecutionStatusOld[i, Backward]);
-
-constraint forall(i in 0..noActivities-1 where isForward(i)) (activityExecutionStatus[i] /\ activityExecutionStatus[backward(i)]);
-
-% Forward and Backward Selection
-
-% constraint forall(i in 0..noRequests-1) (activityExecutionStatusOld[i, Forward] = activityExecutionStatusOld[i, Backward]);
+% 1. Forward and Backward Selection
 
 constraint forall(i in 0..noActivities-1 where isForward(i) /\ isTwoWayTrip(i)) (activityExecutionStatus[i] = activityExecutionStatus[backward(i)]);
 
-% Inter-Activity Time Travel Consistency
+% 2. Inter-Activity Time Travel Consistency
 % might something in between each constraint or to create 4 different ones. And not sure what srv is supposed to be I think it's what I wrote maybe it's requestBoardingDuration
-
-% constraint forall(i, j in 0..noRequests-1, t in ActivityType where i != j /\ activityVehicleOld[i, t] = activityVehicleOld[j, t] ) (
-%     (activityStartOld[j, t] - activityStartOld[i, t] >= distMatrix[requestStart[i], requestStart[j]] + requestBoardingDuration[i]
-%         \/ activityStartOld[i, t] - activityStartOld[j, t] >= distMatrix[requestStart[j], requestStart[i]] + requestBoardingDuration[j])
-    
-%     /\ (activityStartOld[j, t] - activityEndOld[i, t] >= distMatrix[requestStart[i], requestDestination[j]]                                                           
-%         \/ activityEndOld[i, t] - activityStartOld[j, t] >= distMatrix[requestDestination[j], requestStart[i]] + requestBoardingDuration[j] + requestBoardingDuration[i])
-    
-%     /\ (activityEndOld[j, t] - activityStartOld[i, t] >= distMatrix[requestDestination[i], requestStart[j]] + requestBoardingDuration[i] + requestBoardingDuration[j]
-%         \/ activityStartOld[i, t] - activityEndOld[j, t] >= distMatrix[requestStart[j], requestDestination[i]]) 
-    
-%     /\ (activityEndOld[j, t] - activityEndOld[i, t] >= distMatrix[requestDestination[i], requestDestination[j]] + requestBoardingDuration[j]
-%         \/ activityEndOld[i, t] - activityEndOld[j, t] >= distMatrix[requestDestination[j], requestDestination[i]] + requestBoardingDuration[i])
-% );
 
 % constraint forall(i, j in 0..noActivities-1 where i != j /\ i != backward(j) /\ j != backward(i) /\ activityVehicle[i] = activityVehicle[j]) (
 %     (happensForward(i) /\ happensForward(j) /\
@@ -190,20 +167,15 @@ constraint forall(i, j in 0..noActivities-1 where i != j /\ i != backward(j) /\ 
         \/ activityEnd[i] - activityEnd[j] >= distMatrix[requestDestination[activityRequest(j)], requestDestination[activityRequest(i)]] + requestBoardingDuration[activityRequest(i)]))
 );
 
-% Intra-Activity Time Travel Consistency
-
-% constraint forall(i in 0..noRequests-1) (activityDurationOld[i, Forward] >= distMatrix[requestStart[i], requestDestination[i]] /\ activityDurationOld[i, Backward] >= distMatrix[requestDestination[i], requestReturn[i]]);
+% 3. Intra-Activity Time Travel Consistency
 
 constraint forall(i in 0..noActivities-1 where happensForward(i)) (
   (activityDuration[i] >= distMatrix[requestStart[activityRequest(i)], requestDestination[activityRequest(i)]]));
 
 constraint forall(i in 0..noActivities-1 where happensBackward(i)) (
   (activityDuration[i] >= distMatrix[requestDestination[activityRequest(i)], requestReturn[activityRequest(i)]]));
-% Maximum Travel Time - Don't think this is a constraint for our project
 
-% constraint forall(i in 0..noRequests-1) (activityDurationOld[i] <= maxWaitTime)
-
-% Cumulative Resource
+% 4. Cumulative Resource
 
 constraint forall(j in 0..noVehicles-1, i in 0..noActivities-1 where activityVehicle[i] = j /\ (happensForward(i) \/ happensBackward(i))) (
   cumulative(
@@ -213,18 +185,7 @@ constraint forall(j in 0..noVehicles-1, i in 0..noActivities-1 where activityVeh
     vehicleCapacity[j])
 );
 
-% constraint forall (j in 0..noVehicles-1 where j in [activityVehicleOld[i, t] | i in 0..noRequests-1, t in ActivityType]) (
-%   cumulative(
-%     [deopt(v) | v in [activityStartOld[i, t] | i in 0..noRequests-1, t in ActivityType where activityVehicleOld[i, t] = j]],
-%     [deopt(v) | v in [activityDurationOld[i, t] | i in 0..noRequests-1, t in ActivityType where activityVehicleOld[i, t] = j]],
-%     [requestLoad[i] | i in 0..noRequests-1],
-%     vehicleCapacity[j]
-%   )
-% );
-
-
-% Maximum Waiting Time
-% might be optimizable
+% 5. Maximum Waiting Time
 
 constraint forall(i in 0..noActivities-1) (
   (
@@ -266,41 +227,7 @@ constraint forall(i in 0..noActivities-1) (
   )
 );
 
-% N-2. Ensure that the activity start and end times are consistent with the vehicle's availability
-
-% constraint forall (i in 0..noRequests-1 where requestStart[i] != -1)
-%     (activityStartOld[i, fb] >= 
-%         vehicleAvailability[activityVehicleOld[i, fb], any, ShiftStart] + 
-%         requestBoardingDuration[i] + 
-%         distMatrix[requestStart[i], vehicleStart[activityVehicleOld[i, fb]]] | fb in (Forward, Backward));
-
-% constraint forall (i in 0..noRequests-1 where requestReturn[i] != -1)
-%     (activityEndOld[i, fb] <= 
-%         vehicleAvailability[activityVehicleOld[i, fb], any, ShiftEnd] - 
-%         requestBoardingDuration[i] - 
-%         distMatrix[requestReturn[i], vehicleStart[activityVehicleOld[i, fb]]]);
-
-
-% constraint forall (i in 0..2*noRequests-1) (
-%   exists(s in 0..noShifts where i mod 2 == 1)(
-%     activityStart[i] >= 
-%       vehicleAvailability[activityVehicle[i], s, ShiftStart] + 
-%       distMatrix[vehicleStart[activityVehicle[i]],requestStart[i]]
-%     /\
-%     activityEnd[i] <=
-%       vehicleAvailability[activityVehicle[i], s, ShiftEnd] -
-%       distMatrix[requestDestination[i], vehicleEnd[activityVehicle[i]]]
-%   ) /\
-%   exists(s in 0..noShifts where i mod 2 == 0)(
-%     activityStart[i] >= 
-%       vehicleAvailability[activityVehicle[i], s, ShiftStart] + 
-%       distMatrix[vehicleStart[activityVehicle[i]],requestDestination[i]]
-%     /\
-%     activityEnd[i] <=
-%       vehicleAvailability[activityVehicle[i], s, ShiftEnd] -
-%       distMatrix[requestReturn[i], vehicleEnd[activityVehicle[i]]]
-%   )
-% );
+% 6. Ensure that the activity start and end times are consistent with the vehicle's availability
 
 constraint forall (i in 0..noActivities-1) (
   (
@@ -334,13 +261,13 @@ constraint forall (i in 0..noActivities-1) (
   )
 );
 
-% N-1. Given the boolean sameVehicleBackward, we need to ensure it is satisfied
+% 7. Given the boolean sameVehicleBackward, we need to ensure it is satisfied
 
 constraint sameVehicleBackward -> forall (i in 0..noActivities-1 where isForward(i)) (activityVehicle[i] = activityVehicle[backward(i)]);
 
 
-% N. Allow one-trip requests to be granted
-% - We'll assume that the activity execution status is 1 for the trip that isn't done.
+% 8. Allow one-trip requests to be granted
+% - We'll assume that the activity execution status is true for the trip that isn't done.
 
 constraint forall (i in 0..noActivities-1 where not (happensForward(i) \/ happensBackward(i))) (activityExecutionStatus[i] = true);
 
@@ -348,7 +275,7 @@ constraint forall (i in 0..noActivities-1 where not (happensForward(i) \/ happen
 
 % ----------------------------------------------
 
-% this 4 arrays could be the auxiliary variables for the output. I think this way we wouldn't need the activityVehicleOld variable
+% this 4 arrays could be the auxiliary variables for the output. This might be useful if we find that Python is slow to process the output
 
 % array [0..noVehicles-1, 0..noRequests-1, 0..noRequests-1] of var 0..noRequests-1 : vehicleTripPatients; % [ [ [ ], [ 22, 25 ] ] ] - project statement example would be 
 % like this. First array inside is to identify the vehicle and the remaining arrays inside that array would be the patients of each trip of that vehicle
