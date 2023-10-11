@@ -208,15 +208,15 @@ constraint forall(i in 0..noActivities-1) (
     (
       (
         (activityStart[i] in 
-          (requestServiceStartTime[activityRequest(i)]+requestServiceDuration[activityRequest(i)])
+          (requestServiceStartTime[activityRequest(i)]+requestServiceDuration[activityRequest(i)]+requestBoardingDuration[activityRequest(i)])
           ..
-          (requestServiceStartTime[activityRequest(i)]+requestServiceDuration[activityRequest(i)]+maxWaitTime)
+          (requestServiceStartTime[activityRequest(i)]+requestServiceDuration[activityRequest(i)]+requestBoardingDuration[activityRequest(i)]+maxWaitTime)
         )
         /\
         (activityEnd[i] in 
-          (requestServiceStartTime[activityRequest(i)]+requestServiceDuration[activityRequest(i)])
+          (requestServiceStartTime[activityRequest(i)]+requestServiceDuration[activityRequest(i)]+requestBoardingDuration[activityRequest(i)])
           ..
-          (requestServiceStartTime[activityRequest(i)]+requestServiceDuration[activityRequest(i)]+maxWaitTime)
+          (requestServiceStartTime[activityRequest(i)]+requestServiceDuration[activityRequest(i)]+requestBoardingDuration[activityRequest(i)]+maxWaitTime)
         )
       )
     )
@@ -227,7 +227,7 @@ constraint forall(i in 0..noActivities-1) (
 
 constraint forall (i in 0..noActivities-1) (
   (
-    happensForward(i) /\ 
+    isForward(i) /\ happensForward(i) /\ 
     (
       (
         (activityStart[i] >= 
@@ -242,7 +242,7 @@ constraint forall (i in 0..noActivities-1) (
   )
   \/
   (
-    happensBackward(i) /\ 
+    isBackward(i) /\ happensBackward(i) /\ 
     (
       (
         (activityStart[i] >= 
