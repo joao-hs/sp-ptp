@@ -186,7 +186,7 @@ constraint forall(j in 0..noVehicles-1, i in 0..noActivities-1 where activityVeh
 
 constraint forall(i in 0..noActivities-1) (
   (
-    isForward(i) /\ happensForward(i) /\ 
+    happensForward(i) /\ 
     (
       (
         (activityStart[i] in 
@@ -205,7 +205,7 @@ constraint forall(i in 0..noActivities-1) (
   ) 
   \/
   (
-    isBackward(i) /\ happensBackward(i) /\ 
+    happensBackward(i) /\ 
     (
       (
         (activityStart[i] in 
@@ -228,7 +228,7 @@ constraint forall(i in 0..noActivities-1) (
 
 constraint forall (i in 0..noActivities-1) (
   (
-    isForward(i) /\ happensForward(i) /\ 
+    happensForward(i) /\ 
     (
       (
         (activityStart[i] >= 
@@ -243,7 +243,7 @@ constraint forall (i in 0..noActivities-1) (
   )
   \/
   (
-    isBackward(i) /\ happensBackward(i) /\ 
+    happensBackward(i) /\ 
     (
       (
         (activityStart[i] >= 
