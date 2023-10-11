@@ -86,7 +86,7 @@ test happensForward(int: activity) = requestStart[activityRequest(activity)] != 
 test happensBackward(int: activity) = requestReturn[activityRequest(activity)] != -1;
 test isTwoWayTrip(int: activity) = (requestStart[activityRequest(activity)] != -1 /\ requestReturn[activityRequest(backward(activity))] != -1);
 
-var 0..noRequests : grantedRequests = count(i in 0..noActivities-1 where isForward(i))(activityExecutionStatus[i] /\ activityExecutionStatus[backward(i)]);
+var 0..noRequests : grantedRequests = count(i in 0..noActivities-1 where isForward(i))(activityExecutionStatus[i] \/ activityExecutionStatus[backward(i)]);
 
 solve maximize grantedRequests;
 
@@ -123,8 +123,9 @@ constraint forall (i in 0..noActivities-1) (
 );
 
 % 1. Forward and Backward Selection
+% dont think we need this one because of the last constraint
 
-constraint forall(i in 0..noActivities-1 where isForward(i) /\ isTwoWayTrip(i)) (activityExecutionStatus[i] = activityExecutionStatus[backward(i)]);
+% constraint forall(i in 0..noActivities-1 where isForward(i) /\ isTwoWayTrip(i)) (activityExecutionStatus[i] = activityExecutionStatus[backward(i)]);
 
 % 2. Inter-Activity Time Travel Consistency
 % might something in between each constraint or to create 4 different ones. And not sure what srv is supposed to be I think it's what I wrote maybe it's requestBoardingDuration
@@ -189,15 +190,15 @@ constraint forall(i in 0..noActivities-1) (
     (
       (
         (activityStart[i] in 
-          (requestServiceStartTime[activityRequest(i)]-maxWaitTime)
+          (requestServiceStartTime[activityRequest(i)]-requestBoardingDuration[activityRequest(i)]-maxWaitTime)
           ..
-          (requestServiceStartTime[activityRequest(i)])
+          (requestServiceStartTime[activityRequest(i)]-requestBoardingDuration[activityRequest(i)])
         )
         /\
         (activityEnd[i] in 
-          (requestServiceStartTime[activityRequest(i)]-maxWaitTime)
+          (requestServiceStartTime[activityRequest(i)]-requestBoardingDuration[activityRequest(i)]-maxWaitTime)
           ..
-          (requestServiceStartTime[activityRequest(i)])
+          (requestServiceStartTime[activityRequest(i)]-requestBoardingDuration[activityRequest(i)])
         )
       )
     )
@@ -264,8 +265,10 @@ constraint sameVehicleBackward -> forall (i in 0..noActivities-1 where isForward
 
 % 8. Allow one-trip requests to be granted
 % - We'll assume that the activity execution status is true for the trip that isn't done.
+% Dont think we need this one either after reading the paper
 
-constraint forall (i in 0..noActivities-1 where not (happensForward(i) \/ happensBackward(i))) (activityExecutionStatus[i] = true);
+
+% constraint forall (i in 0..noActivities-1 where not (happensForward(i) \/ happensBackward(i))) (activityExecutionStatus[i] = true);
 
 
 
