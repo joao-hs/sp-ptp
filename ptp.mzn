@@ -260,7 +260,7 @@ constraint forall (i in 0..noActivities-1) (
 
 % 7. Given the boolean sameVehicleBackward, we need to ensure it is satisfied
 
-constraint sameVehicleBackward -> forall (i in 0..noActivities-1 where isForward(i)) (expandedToOriginalVehicle[activityVehicle[i]] = expandedToOriginalVehicle[activityVehicle[backward(i)]]);
+constraint sameVehicleBackward -> forall (i in 0..noActivities-1 where isForward(i) /\ happensForward(i) /\ happensBackward(i)) (expandedToOriginalVehicle[activityVehicle[i]] = expandedToOriginalVehicle[activityVehicle[backward(i)]]);
 
 
 % 8. Allow one-trip requests to be granted
