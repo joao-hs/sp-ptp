@@ -6,45 +6,45 @@
             "trips": [
                 {
                     "origin": 2,
-                    "destination": 3,
-                    "arrival": "11h26",
-                    "patients": []
-                },
-                {
-                    "origin": 3,
-                    "destination": 0,
-                    "arrival": "11h43",
-                    "patients": [
-                        6
-                    ]
-                },
-                {
-                    "origin": 0,
                     "destination": 4,
-                    "arrival": "11h58",
+                    "arrival": "9h18",
                     "patients": []
                 },
                 {
                     "origin": 4,
-                    "destination": 0,
-                    "arrival": "12h09",
+                    "destination": 3,
+                    "arrival": "9h42",
                     "patients": [
                         7
                     ]
                 },
                 {
-                    "origin": 0,
-                    "destination": 1,
-                    "arrival": "12h13",
+                    "origin": 3,
+                    "destination": 0,
+                    "arrival": "11h28",
                     "patients": [
                         6,
                         7
                     ]
                 },
                 {
+                    "origin": 0,
+                    "destination": 1,
+                    "arrival": "11h58",
+                    "patients": [
+                        7
+                    ]
+                },
+                {
                     "origin": 1,
+                    "destination": 0,
+                    "arrival": "12h18",
+                    "patients": []
+                },
+                {
+                    "origin": 0,
                     "destination": 3,
-                    "arrival": "12h24",
+                    "arrival": "12h33",
                     "patients": [
                         6
                     ]
@@ -52,13 +52,13 @@
                 {
                     "origin": 3,
                     "destination": 1,
-                    "arrival": "13h02",
+                    "arrival": "13h00",
                     "patients": []
                 },
                 {
                     "origin": 1,
                     "destination": 4,
-                    "arrival": "13h17",
+                    "arrival": "13h19",
                     "patients": [
                         7
                     ]
@@ -66,7 +66,7 @@
                 {
                     "origin": 4,
                     "destination": 2,
-                    "arrival": "15h39",
+                    "arrival": "15h41",
                     "patients": []
                 }
             ]
