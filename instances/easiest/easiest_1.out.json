@@ -1,0 +1,13 @@
+{
+    "requests": 0,
+    "vehicles": [
+        {
+            "id": 5,
+            "trips": []
+        },
+        {
+            "id": 6,
+            "trips": []
+        }
+    ]
+}

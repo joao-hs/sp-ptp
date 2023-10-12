@@ -3,6 +3,8 @@
 ran_tests=1
 
 start=$(date +%s.%N)
+count=0
+parallelCount=3
 
 if [ -z "$1" ]; then
     echo "Running all tests"
@@ -13,12 +15,30 @@ if [ -z "$1" ]; then
     done
     wait
 elif [ $# == 1 ]; then
-    if [ $1 == "easy" ]; then
+    if [ $1 == "easiest" ]; then
+        echo "Running easiest tests"
+        for f in instances/easiest/*.in.json; do
+            (echo "OUTPUT FOR TEST: $(basename ${f/.in.json/})------------------"
+            python3 proj.py $f ${f/.in.json/.out.json}
+            echo "TEST DONE ---------------------------------------------------") > ${f/.in.json/.out} &
+            count=$((count+1))
+            if [ $count == $parallelCount ]; then
+                wait
+                count=0
+            fi
+        done
+        wait
+    elif [ $1 == "easy" ]; then
         echo "Running easy tests"
         for f in instances/easy/*.in.json; do
             (echo "OUTPUT FOR TEST: $(basename ${f/.in.json/})------------------"
             python3 proj.py $f ${f/.in.json/.out.json}
             echo "TEST DONE ---------------------------------------------------") > ${f/.in.json/.out} &
+            count=$((count+1))
+            if [ $count == $parallelCount ]; then
+                wait
+                count=0
+            fi
         done
         wait
     elif [ $1 == "medium" ]; then
@@ -27,6 +47,11 @@ elif [ $# == 1 ]; then
             (echo "OUTPUT FOR TEST: $(basename ${f/.in.json/})------------------"
             python3 proj.py $f ${f/.in.json/.out.json}
             echo "TEST DONE ---------------------------------------------------")  > ${f/.in.json/.out} &
+            count=$((count+1))
+            if [ $count == $parallelCount ]; then
+                wait
+                count=0
+            fi
         done
         wait
     elif [ $1 == "hard" ]; then
@@ -35,6 +60,11 @@ elif [ $# == 1 ]; then
             (echo "OUTPUT FOR TEST: $(basename ${f/.in.json/})------------------"
             python3 proj.py $f ${f/.in.json/.out.json}
             echo "TEST DONE ---------------------------------------------------")  > ${f/.in.json/.out} &
+            count=$((count+1))
+            if [ $count == $parallelCount ]; then
+                wait
+                count=0
+            fi
         done
         wait
     elif [ $1 == "custom" ]; then
@@ -43,6 +73,11 @@ elif [ $# == 1 ]; then
             (echo "OUTPUT FOR TEST: $(basename ${f/.in.json/})------------------"
             python3 proj.py $f ${f/.in.json/.out.json}
             echo "TEST DONE ---------------------------------------------------")  > ${f/.in.json/.out} &
+            count=$((count+1))
+            if [ $count == $parallelCount ]; then
+                wait
+                count=0
+            fi
         done
         wait
     # elif $1.in.json is in instances subdirectories
