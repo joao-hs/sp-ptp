@@ -108,8 +108,8 @@ output ["activityVehicle = ", show(activityVehicle), "\n"];
 constraint forall (i in 0..noActivities-1 where happens(i) /\ activityExecutionStatus[i] == Granted) (
   (
     (isForward(i)) -> (
-        (activityStart[i] in 0..requestServiceStartTime[activityRequest(i)]) /\
-        (activityEnd[i] in 0..requestServiceStartTime[activityRequest(i)]) /\
+        % (activityStart[i] in 0..requestServiceStartTime[activityRequest(i)]) /\
+        % (activityEnd[i] in 0..requestServiceStartTime[activityRequest(i)]) /\
         (activityDuration[i] = activityEnd[i] - activityStart[i]) /\
         (activityVehicle[i] in {v | v in 0..noVehicles-1 where vehicleCanTake[v, requestCategory[activityRequest(i)]]})
     )
@@ -119,8 +119,8 @@ constraint forall (i in 0..noActivities-1 where happens(i) /\ activityExecutionS
 
   (
     (isBackward(i)) -> (
-        (activityStart[i] in (requestServiceStartTime[activityRequest(i)]+requestServiceDuration[activityRequest(i)])..DAY_IN_MINUTES) /\
-        (activityEnd[i] in (requestServiceStartTime[activityRequest(i)]+requestServiceDuration[activityRequest(i)])..DAY_IN_MINUTES) /\
+        % (activityStart[i] in (requestServiceStartTime[activityRequest(i)]+requestServiceDuration[activityRequest(i)])..DAY_IN_MINUTES) /\
+        % (activityEnd[i] in (requestServiceStartTime[activityRequest(i)]+requestServiceDuration[activityRequest(i)])..DAY_IN_MINUTES) /\
         (activityDuration[i] = activityEnd[i] - activityStart[i]) /\
         (activityVehicle[i] in {v | v in 0..noVehicles-1 where vehicleCanTake[v, requestCategory[activityRequest(i)]]})
     )
@@ -181,10 +181,10 @@ constraint forall(i, j in 0..noActivities-1 where i != j /\ expandedToOriginalVe
 % 3. Intra-Activity Time Travel Consistency
 
 constraint forall(i in 0..noActivities-1 where isForward(i) /\ happensForward(i) /\ activityExecutionStatus[i] == Granted) (
-  (activityDuration[i] >= distMatrix[requestStart[activityRequest(i)], requestDestination[activityRequest(i)]]));
+  (activityDuration[i] >= distMatrix[requestStart[activityRequest(i)], requestDestination[activityRequest(i)]]+2*requestBoardingDuration[activityRequest(i)]));
 
 constraint forall(i in 0..noActivities-1 where isBackward(i) /\ happensBackward(i) /\ activityExecutionStatus[i] == Granted) (
-  (activityDuration[i] >= distMatrix[requestDestination[activityRequest(i)], requestReturn[activityRequest(i)]]));
+  (activityDuration[i] >= distMatrix[requestDestination[activityRequest(i)], requestReturn[activityRequest(i)]]+2*requestBoardingDuration[activityRequest(i)]));
 
 % 4. Cumulative Resource
 
@@ -201,36 +201,36 @@ constraint forall(j in 0..noVehicles-1, i in 0..noActivities-1 where activityVeh
 constraint forall(i in 0..noActivities-1 where isForward(i) /\ happensForward(i) /\ activityExecutionStatus[i] == Granted) (
   (activityStart[i] in 
     % minimum case: vehicle start's shift and goes directly to the patient's location
-    (vehicleAvailability[activityVehicle[i], ShiftStart] + distMatrix[vehicleStart[activityVehicle[i]], requestStart[activityRequest(i)]])
+    0
     ..
     % maximum case: vehicle needs to pick up the patient just in time to drop off at the medical center (including the boarding duration)
-    (requestServiceStartTime[activityRequest(i)] - requestBoardingDuration[activityRequest(i)] - distMatrix[requestDestination[activityRequest(i)], requestStart[activityRequest(i)]])
+    (requestServiceStartTime[activityRequest(i)]-requestBoardingDuration[activityRequest(i)]-maxWaitTime)
   )
   /\
   (activityEnd[i] in 
     % minimum case: the vehicle arrives the medical center and drops off the patient within maxWaitTime and boarding duration
-    (requestServiceStartTime[activityRequest(i)]-requestBoardingDuration[activityRequest(i)]-maxWaitTime)
+    0
     ..
     % maximum case: the vehicle arrives the medical center and the patient doesn't need to wait
-    (requestServiceStartTime[activityRequest(i)]-requestBoardingDuration[activityRequest(i)])
+    (requestServiceStartTime[activityRequest(i)]-requestBoardingDuration[activityRequest(i)]-maxWaitTime)
   )
 );
 
 constraint forall(i in 0..noActivities-1 where isBackward(i) /\ happensBackward(i) /\ activityExecutionStatus[i] == Granted) (
   (activityStart[i] in 
     % minimum case: vehicle is already at the medical center waiting for the patient
-    (requestServiceStartTime[activityRequest(i)]+requestServiceDuration[activityRequest(i)])
+    (requestServiceStartTime[activityRequest(i)]+requestServiceDuration[activityRequest(i)]+requestBoardingDuration[activityRequest(i)]+maxWaitTime)
     ..
     % maximum case: vehicle needs to get the patient before maxWaitTime
-    (requestServiceStartTime[activityRequest(i)]+requestServiceDuration[activityRequest(i)]+maxWaitTime)
+    DAY_IN_MINUTES
   )
   /\
   (activityEnd[i] in 
     % minimum case: vehicle goes directly to patient's return place
-    (requestServiceStartTime[activityRequest(i)]+requestServiceDuration[activityRequest(i)]+requestBoardingDuration[activityRequest(i)]+distMatrix[requestDestination[activityRequest(i)], requestReturn[activityRequest(i)]]+requestBoardingDuration[activityRequest(i)])
+    (requestServiceStartTime[activityRequest(i)]+requestServiceDuration[activityRequest(i)]+requestBoardingDuration[activityRequest(i)]+maxWaitTime)
     ..
     % maximum case: vehicle needs to drop off the patient before the shift ends
-    (vehicleAvailability[activityVehicle[i], ShiftEnd] - distMatrix[requestDestination[activityRequest(i)], vehicleEnd[activityVehicle[i]]])
+    DAY_IN_MINUTES
   )
 );
 
