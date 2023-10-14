@@ -40,7 +40,7 @@ def get_trips_by_vehicle(activityStart : list, activityEnd : list, activityVehic
                 vehicleTripsAux[actVehicle].append((requestData["requestReturn"][patient], actEnd, patient))
 
 
-    onboardPatients = set()
+    onboardPatients = list()
     for vehicleIndex in range(noTrueVehicles):
         tripsForVehicle = [trip 
                            for vehicleShift in range(vehiclesIdToIndexRange[vehiclesIndexToId[vehicleIndex]][0], vehiclesIdToIndexRange[vehiclesIndexToId[vehicleIndex]][1]+1) 
@@ -54,22 +54,22 @@ def get_trips_by_vehicle(activityStart : list, activityEnd : list, activityVehic
         # trip tuple ~ (origin, destination, arrival, patients)
         (origin, arrival, patient) = tripsForVehicle.pop(0)
         vehicleTrips[vehicleIndex].append((vehicleData["vehicleStart"][vehicleIndex], origin, arrival, set())) # first trip is from vehicle start to first patient
-        onboardPatients.add(patient) # first patient gets onboard
+        onboardPatients.append(patient) # first patient gets onboard
         
         while tripsForVehicle:
             (destination, arrival, patient) = tripsForVehicle.pop(0)
-            vehicleTrips[vehicleIndex].append((origin, destination, arrival, onboardPatients.copy()))
+            if (origin != destination):
+                vehicleTrips[vehicleIndex].append((origin, destination, arrival, onboardPatients.copy()))
             if patient in onboardPatients: # if the activity is associated with the patient and they are onboard, they are now offboarding
                 onboardPatients.remove(patient)
             else: # otherwise, they are now onboarding
-                onboardPatients.add(patient)
+                onboardPatients.append(patient)
             origin=destination # the next origin is the current destination
         
         vehicleTrips[vehicleIndex].append((
             origin, 
             vehicleData["vehicleEnd"][vehicleIndex],
             arrival+ # last arrival time plus
-            requestData["requestBoardingDuration"][patient]+ # the offboarding time of the last patient plus
             data["distMatrix"][destination][vehicleData["vehicleEnd"][vehicleIndex]], # the time it takes to go from the current location to the vehicle depot
             onboardPatients.copy() # should be empty
             )) # the last trip is to the vehicle depot
@@ -293,7 +293,7 @@ dump(
 # }
 
 
-result = instance.solve()
+result = instance.solve(optimisation_level=3)
 
 
 if result.status is Status.UNSATISFIABLE:
