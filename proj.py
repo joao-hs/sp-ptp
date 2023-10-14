@@ -20,7 +20,7 @@ def get_place_category(place : int) -> str:
     return "MedicalCenter" if place == 0 else "VehicleDepot" if place == 1 else "PatientLocation"
 
 # Aggregates the output of the model into a list of trips by vehicle
-def get_trips_by_vehicle(activityStart : list, activityEnd : list, activityVehicle: list) -> dict:
+def get_trips_by_vehicle(activityStart : list, activityEnd : list, activityVehicle: list, activityExecutionStatus: list) -> dict:
     global noVehicles, noTrueVehicles, noRequests
 
     vehicleTripsAux = {i:list() for i in range(noVehicles)}
@@ -29,14 +29,13 @@ def get_trips_by_vehicle(activityStart : list, activityEnd : list, activityVehic
     vehicleTrips = {
         i: list() for i in range(noTrueVehicles)
     }
-    for partialActivity, (actStart, actEnd, actVehicle) in enumerate(zip(activityStart, activityEnd, activityVehicle)):
+    for partialActivity, (actStart, actEnd, actVehicle, actExecStatus) in enumerate(zip(activityStart, activityEnd, activityVehicle, activityExecutionStatus)):
         patient = partialActivity // 2
-        if partialActivity % 2 == 0: # forward
-            if requestData["requestStart"][patient] != -1:
+        if actExecStatus == 'Granted':
+            if partialActivity % 2 == 0: # forward
                 vehicleTripsAux[actVehicle].append((requestData["requestStart"][patient], actStart, patient)) 
                 vehicleTripsAux[actVehicle].append((requestData["requestDestination"][patient], actEnd, patient))               
-        else: # backward
-            if requestData["requestReturn"][patient] != -1:
+            else: # backward
                 vehicleTripsAux[actVehicle].append((requestData["requestDestination"][patient], actStart, patient))
                 vehicleTripsAux[actVehicle].append((requestData["requestReturn"][patient], actEnd, patient))
 
@@ -54,7 +53,7 @@ def get_trips_by_vehicle(activityStart : list, activityEnd : list, activityVehic
         # vehicleTripsAux[vehicle].sort(key=lambda x: x[1]) # sort by arrival time
         # trip tuple ~ (origin, destination, arrival, patients)
         (origin, arrival, patient) = tripsForVehicle.pop(0)
-        vehicleTrips[vehicleIndex].append((vehicleData["vehicleStart"][vehicleIndex], origin, arrival-requestData["requestBoardingDuration"][patient], set())) # first trip is from vehicle start to first patient
+        vehicleTrips[vehicleIndex].append((vehicleData["vehicleStart"][vehicleIndex], origin, arrival, set())) # first trip is from vehicle start to first patient
         onboardPatients.add(patient) # first patient gets onboard
         
         while tripsForVehicle:
@@ -152,7 +151,7 @@ instance["noVehicles"] = noVehicles
 vehiclesIndexToId = {index:-1 for index in range(noVehicles)}
 vehiclesIdToIndexRange = {vehicle["id"]:(0,0) for vehicle in data["vehicles"]}
 
-noCategories = len({cat for vehicle in data["vehicles"] for cat in vehicle["canTake"]})
+noCategories = max(len({cat for vehicle in data["vehicles"] for cat in vehicle["canTake"]}), len({patient["category"] for patient in data["patients"]}))
 instance["noCategories"] = noCategories
 
 vehicleData = dict(
@@ -165,6 +164,7 @@ vehicleData = dict(
 )
 
 nextIndex = 0
+trueVehicleIndex = 0
 
 for vehicle in data["vehicles"]:
     commonId = vehicle["id"]
@@ -172,7 +172,6 @@ for vehicle in data["vehicles"]:
     commonStart = vehicle["start"]
     commonEnd = vehicle["end"]
     commonCapacity = vehicle["capacity"]
-    firstVehicleIndex = nextIndex
     for index, availability in enumerate(vehicle["availability"]):
         vehiclesIndexToId[nextIndex + index] = commonId
         vehicleData["vehicleCanTake"][nextIndex + index] = commonCanTake
@@ -180,9 +179,10 @@ for vehicle in data["vehicles"]:
         vehicleData["vehicleEnd"][nextIndex + index] = commonEnd
         vehicleData["vehicleCapacity"][nextIndex + index] = commonCapacity
         vehicleData["vehicleAvailability"][nextIndex + index] = get_availability(availability)
-        vehicleData["expandedToOriginalVehicle"][nextIndex + index] = nextIndex
-    vehiclesIdToIndexRange[commonId] = (firstVehicleIndex, nextIndex+index)
+        vehicleData["expandedToOriginalVehicle"][nextIndex + index] = trueVehicleIndex
+    vehiclesIdToIndexRange[commonId] = (trueVehicleIndex, nextIndex+index)
     nextIndex += index + 1
+    trueVehicleIndex += 1
 
 
 for key in vehicleData:
@@ -314,7 +314,7 @@ if result.status is Status.UNSATISFIABLE:
 
 print(result)
 
-vehicleTrips = get_trips_by_vehicle(result["activityStart"], result["activityEnd"], result["activityVehicle"])
+vehicleTrips = get_trips_by_vehicle(result["activityStart"], result["activityEnd"], result["activityVehicle"], result["activityExecutionStatus"])
 
 dump(
     {
