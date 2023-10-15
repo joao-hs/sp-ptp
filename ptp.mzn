@@ -108,27 +108,26 @@ output ["activityVehicle = ", show(activityVehicle), "\n"];
 % Might be optimizable
 
 constraint forall (i in 0..noActivities-1 where happens(i) /\ activityExecutionStatus[i] == Granted) (
-  (
-    (isForward(i)) -> (
-        (activityDuration[i] = activityEnd[i] - activityStart[i]) /\
-        (activityVehicle[i] in {v | v in 0..noVehicles-1 where vehicleCanTake[v, requestCategory[activityRequest(i)]]})
-    )
-  )
-  
-  /\
+  (activityDuration[i] = activityEnd[i] - activityStart[i]) /\
+  (activityVehicle[i] in {v | v in 0..noVehicles-1 where vehicleCanTake[v, requestCategory[activityRequest(i)]]})
+  /\ trace("(0)", true)
+);
 
-  (
-    (isBackward(i)) -> (
-        (activityDuration[i] = activityEnd[i] - activityStart[i]) /\
-        (activityVehicle[i] in {v | v in 0..noVehicles-1 where vehicleCanTake[v, requestCategory[activityRequest(i)]]})
-    )
+constraint redundant_constraint(
+  forall(i in 0..noActivities-1 where isForward(i) /\ happensForward(i) /\ activityExecutionStatus[i] == Granted)(
+    activityStart[i] < activityEnd[i]
+    /\
+    activityEnd[i] < activityStart[backward(i)]
+    /\
+    activityStart[backward(i)] < activityEnd[backward(i)]
   )
+  /\ trace("(-1)", true)
 );
 
 % 1. Forward and Backward Selection
 % dont think we need this one because of the last constraint
 
-constraint forall(i in 0..noActivities-1 where isForward(i) /\ isTwoWayTrip(i)) (activityExecutionStatus[i] = activityExecutionStatus[backward(i)]);
+constraint forall(i in 0..noActivities-1 where isForward(i) /\ isTwoWayTrip(i)) (activityExecutionStatus[i] = activityExecutionStatus[backward(i)] /\ trace("(1)", true));
 
 % 5.1. Ensure that maxWaitTime is enought to satisfy the request
 constraint forall(i in 0..noActivities-1 where happens(i)) (
@@ -136,6 +135,7 @@ constraint forall(i in 0..noActivities-1 where happens(i)) (
     then activityExecutionStatus[i] = Rejected 
   else true 
   endif
+  /\ trace("(5.1)", true)
 );
 
 % 6.1. Vehicles that can't reach the activity's origin or destination in time can't be assigned to it
@@ -144,21 +144,22 @@ constraint forall (v in 0..noVehicles-1, i in 0..noActivities-1 where happens(i)
     then activityVehicle[i] != v 
   else true
   endif
+  /\ trace("(6.1)", true)
 );
 
 % 8. Allow one-trip requests to be granted
 % - We'll assume that the activity execution status is true for the trip that isn't done.
 
-constraint forall (i in 0..noActivities-1) (if happens(i) then activityExecutionStatus[i] != NotNeeded else activityExecutionStatus[i] = NotNeeded endif);
+constraint forall (i in 0..noActivities-1) (if happens(i) then activityExecutionStatus[i] != NotNeeded else activityExecutionStatus[i] = NotNeeded endif /\ trace("(8)", true));
 
 % 7. Given the boolean sameVehicleBackward, we need to ensure it is satisfied
 
-constraint sameVehicleBackward -> forall (i in 0..noActivities-1 where isForward(i) /\ happensForward(i) /\ happensBackward(backward(i)) /\ activityExecutionStatus[i] == Granted) (expandedToOriginalVehicle[activityVehicle[i]] = expandedToOriginalVehicle[activityVehicle[backward(i)]]);
+constraint sameVehicleBackward -> forall (i in 0..noActivities-1 where isForward(i) /\ happensForward(i) /\ happensBackward(backward(i)) /\ activityExecutionStatus[i] == Granted) (expandedToOriginalVehicle[activityVehicle[i]] = expandedToOriginalVehicle[activityVehicle[backward(i)]] /\ trace("(7)", true));
 
 
 % 2. Inter-Activity Time Travel Consistency
 
-constraint forall(i, j in 0..noActivities-1 where i != j /\ expandedToOriginalVehicle[activityVehicle[i]] = expandedToOriginalVehicle[activityVehicle[j]] /\ happens(i) /\ happens(j) /\ activityExecutionStatus[i] == Granted /\ activityExecutionStatus[j] == Granted) (
+constraint forall(i, j in 0..noActivities-1 where i < j /\ expandedToOriginalVehicle[activityVehicle[i]] = expandedToOriginalVehicle[activityVehicle[j]] /\ happens(i) /\ happens(j) /\ activityExecutionStatus[i] == Granted /\ activityExecutionStatus[j] == Granted) (
   (
     activityStart[j] - activityStart[i] >= distMatrix[activityOrigin(i), activityOrigin(j)] + requestBoardingDuration[activityRequest(i)] 
     \/ 
@@ -182,12 +183,14 @@ constraint forall(i, j in 0..noActivities-1 where i != j /\ expandedToOriginalVe
     \/
     activityEnd[i] - activityEnd[j] >= distMatrix[activityDestination(j), activityDestination(i)] + requestBoardingDuration[activityRequest(i)]
   )
+  /\ trace("(2)", true)
 );
 
 % 3. Intra-Activity Time Travel Consistency
 
 constraint forall(i in 0..noActivities-1 where happens(i) /\ activityExecutionStatus[i] == Granted) (
   activityDuration[i] >= distMatrix[activityOrigin(i), activityDestination(i)] + 2 * requestBoardingDuration[activityRequest(i)]
+  /\ trace("(3)", true)
 );
 
 % 4. Cumulative Resource
@@ -199,6 +202,7 @@ constraint forall(j in 0..noVehicles-1) (
     array1d(0..noActivities-1, [if act in vehicleActivities then requestLoad[activityRequest(act)] else 0 endif | act in 0..noActivities-1, vehicleActivities = {i | i in 0..noActivities-1 where activityVehicle[i] = j /\ happens(i) /\ activityExecutionStatus[i] == Granted}]),
     vehicleCapacity[j]
   )
+  /\ trace("(4)", true)
 );
 
 % 5. Maximum Waiting Time
@@ -219,6 +223,7 @@ constraint forall(i in 0..noActivities-1 where isForward(i) /\ happensForward(i)
     % maximum case: the vehicle leaves the patient just in time for the appointment
     (requestServiceStartTime[activityRequest(i)])
   )
+  /\ trace("(5.2)", true)
 );
 
 constraint forall(i in 0..noActivities-1 where isBackward(i) /\ happensBackward(i) /\ activityExecutionStatus[i] == Granted) (
@@ -237,16 +242,18 @@ constraint forall(i in 0..noActivities-1 where isBackward(i) /\ happensBackward(
     % maximum case: we use all the maximum wait time
     (requestServiceStartTime[activityRequest(i)] + requestServiceDuration[activityRequest(i)] + maxWaitTime)
   )
+  /\ trace("(5.3)", true)
 );
 
 % 6. Ensure that the activity start and end times are consistent with the vehicle's availability
 
 constraint forall (i in 0..noActivities-1 where happens(i) /\ activityExecutionStatus[i] == Granted) (
   (activityStart[i] >= vehicleAvailability[activityVehicle[i], ShiftStart]
-    +distMatrix[vehicleStart[activityVehicle[i]], activityOrigin(i)])
+    + distMatrix[vehicleStart[activityVehicle[i]], activityOrigin(i)])
   /\
   (activityEnd[i] <= vehicleAvailability[activityVehicle[i], ShiftEnd]
     - distMatrix[activityDestination(i), vehicleEnd[activityVehicle[i]]])
+  /\ trace("(6.2)", true)
 );
 
 % ----------------------------------------------
@@ -266,3 +273,4 @@ constraint forall (i in 0..noActivities-1 where happens(i) /\ activityExecutionS
 % every vehicle.
 
 % ----------------------------------------------
+

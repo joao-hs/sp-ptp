@@ -58,9 +58,15 @@ def get_trips_by_vehicle(activityStart : list, activityEnd : list, activityVehic
         
         while tripsForVehicle:
             (destination, arrival, patient) = tripsForVehicle.pop(0)
+            isPatientOnboard = patient in onboardPatients
             if (origin != destination):
-                vehicleTrips[vehicleIndex].append((origin, destination, arrival, onboardPatients.copy()))
-            if patient in onboardPatients: # if the activity is associated with the patient and they are onboard, they are now offboarding
+                vehicleTrips[vehicleIndex].append(
+                    (origin, 
+                     destination, 
+                     arrival - requestData["requestBoardingDuration"][patient] if isPatientOnboard else arrival, 
+                     onboardPatients.copy())
+                )
+            if isPatientOnboard: # if the activity is associated with the patient and they are onboard, they are now offboarding
                 onboardPatients.remove(patient)
             else: # otherwise, they are now onboarding
                 onboardPatients.append(patient)
@@ -219,28 +225,30 @@ for key in requestData:
 instance["distMatrix"] = data["distMatrix"]
 
 
-# print("=============== DATA INPUT TO MINIZINC ===============")
-# print("sameVehicleBackward:", data["sameVehicleBackward"])
-# print("maxWaitTime:", get_minutes(data["maxWaitTime"]))
-# print("noPlaces:", noPlaces)
-# print("placeCategory:", [get_place_category(place["category"]) for place in data["places"]])
-# print("noVehicles:", noVehicles)
-# print("noCategories:", noCategories)
-# print("vehicleCanTake:", vehicleData["vehicleCanTake"])
-# print("vehicleStart:", vehicleData["vehicleStart"])
-# print("vehicleEnd:", vehicleData["vehicleEnd"])
-# print("vehicleCapacity:", vehicleData["vehicleCapacity"])
-# print("vehicleAvailability:", vehicleData["vehicleAvailability"])
-# print("noRequests:", noRequests)
-# print("requestStart:", requestData["requestStart"])
-# print("requestDestination:", requestData["requestDestination"])
-# print("requestReturn:", requestData["requestReturn"])
-# print("requestLoad:", requestData["requestLoad"])
-# print("requestServiceStartTime:", requestData["requestServiceStartTime"])
-# print("requestServiceDuration:", requestData["requestServiceDuration"])
-# print("requestCategory:", requestData["requestCategory"])
-# print("requestBoardingDuration:", requestData["requestBoardingDuration"])
-# print("distMatrix:", data["distMatrix"])
+# print("%=============== DATA INPUT TO MINIZINC ===============")
+# print("sameVehicleBackward =", "true" if data["sameVehicleBackward"] else "false", end=";\n", file=dzn_file)
+# print("maxWaitTime =", get_minutes(data["maxWaitTime"]), end=";\n", file=dzn_file)
+# print("noPlaces =", noPlaces, end=";\n", file=dzn_file)
+# print("placeCategory =", [get_place_category(place["category"]) for place in data["places"]], end=";\n", file=dzn_file)
+# print("noVehicles =", noVehicles, end=";\n", file=dzn_file)
+# print("noOriginalVehicles =", noTrueVehicles, end=";\n", file=dzn_file)
+# print("expandedToOriginalVehicle =", [vehiclesIdToIndexRange[vehiclesIndexToId[i]][0] for i in range(noVehicles)], end=";\n", file=dzn_file)
+# print("noCategories =", noCategories, end=";\n", file=dzn_file)
+# print("vehicleCanTake =", [["true" if i else "false" for i in v] for v in vehicleData["vehicleCanTake"]], end=";\n", file=dzn_file)
+# print("vehicleStart =", vehicleData["vehicleStart"], end=";\n", file=dzn_file)
+# print("vehicleEnd =", vehicleData["vehicleEnd"], end=";\n", file=dzn_file)
+# print("vehicleCapacity =", vehicleData["vehicleCapacity"], end=";\n", file=dzn_file)
+# print("vehicleAvailability =", vehicleData["vehicleAvailability"], end=";\n", file=dzn_file)
+# print("noRequests =", noRequests, end=";\n", file=dzn_file)
+# print("requestStart =", requestData["requestStart"], end=";\n", file=dzn_file)
+# print("requestDestination =", requestData["requestDestination"], end=";\n", file=dzn_file)
+# print("requestReturn =", requestData["requestReturn"], end=";\n", file=dzn_file)
+# print("requestLoad =", requestData["requestLoad"], end=";\n", file=dzn_file)
+# print("requestServiceStartTime =", requestData["requestServiceStartTime"], end=";\n", file=dzn_file)
+# print("requestServiceDuration =", requestData["requestServiceDuration"], end=";\n", file=dzn_file)
+# print("requestCategory =", requestData["requestCategory"], end=";\n", file=dzn_file)
+# print("requestBoardingDuration =", requestData["requestBoardingDuration"], end=";\n", file=dzn_file)
+# print("distMatrix =", data["distMatrix"], end=";\n", file=dzn_file)
 dump(
     {
         "sameVehicleBackward": data["sameVehicleBackward"],

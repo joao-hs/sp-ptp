@@ -4,14 +4,23 @@ ran_tests=1
 
 start=$(date +%s.%N)
 count=0
-parallelCount=3
+parallelCount=1
+source .venv/bin/activate
+
 
 if [ -z "$1" ]; then
     echo "Running all tests"
     for f in instances/*/*.in.json; do
+        echo $(basename ${f/.in.json/})
         (echo "OUTPUT FOR TEST: $(basename ${f/.in.json/})------------------"
         python3 proj.py $f ${f/.in.json/.out.json}
+        python3 jsonToDzn.py $f.mzn.json ${f/.in.json/.dzn}
         echo "TEST DONE ---------------------------------------------------") > ${f/.in.json/.out} &
+        count=$((count+1))
+        if [ $count == $parallelCount ]; then
+            wait
+            count=0
+        fi
     done
     wait
 elif [ $# == 1 ]; then
@@ -20,6 +29,7 @@ elif [ $# == 1 ]; then
         for f in instances/easiest/*.in.json; do
             (echo "OUTPUT FOR TEST: $(basename ${f/.in.json/})------------------"
             python3 proj.py $f ${f/.in.json/.out.json}
+            python3 jsonToDzn.py $f.mzn.json ${f/.in.json/.dzn}
             echo "TEST DONE ---------------------------------------------------") > ${f/.in.json/.out} &
             count=$((count+1))
             if [ $count == $parallelCount ]; then
@@ -33,6 +43,7 @@ elif [ $# == 1 ]; then
         for f in instances/easy/*.in.json; do
             (echo "OUTPUT FOR TEST: $(basename ${f/.in.json/})------------------"
             python3 proj.py $f ${f/.in.json/.out.json}
+            python3 jsonToDzn.py $f.mzn.json ${f/.in.json/.dzn}
             echo "TEST DONE ---------------------------------------------------") > ${f/.in.json/.out} &
             count=$((count+1))
             if [ $count == $parallelCount ]; then
@@ -46,6 +57,7 @@ elif [ $# == 1 ]; then
         for f in instances/medium/*.in.json; do
             (echo "OUTPUT FOR TEST: $(basename ${f/.in.json/})------------------"
             python3 proj.py $f ${f/.in.json/.out.json}
+            python3 jsonToDzn.py $f.mzn.json ${f/.in.json/.dzn}
             echo "TEST DONE ---------------------------------------------------")  > ${f/.in.json/.out} &
             count=$((count+1))
             if [ $count == $parallelCount ]; then
@@ -59,6 +71,7 @@ elif [ $# == 1 ]; then
         for f in instances/hard/*.in.json; do
             (echo "OUTPUT FOR TEST: $(basename ${f/.in.json/})------------------"
             python3 proj.py $f ${f/.in.json/.out.json}
+            python3 jsonToDzn.py $f.mzn.json ${f/.in.json/.dzn}
             echo "TEST DONE ---------------------------------------------------")  > ${f/.in.json/.out} &
             count=$((count+1))
             if [ $count == $parallelCount ]; then
@@ -72,6 +85,7 @@ elif [ $# == 1 ]; then
         for f in instances/custom/*.in.json; do
             (echo "OUTPUT FOR TEST: $(basename ${f/.in.json/})------------------"
             python3 proj.py $f ${f/.in.json/.out.json}
+            python3 jsonToDzn.py $f.mzn.json ${f/.in.json/.dzn}
             echo "TEST DONE ---------------------------------------------------")  > ${f/.in.json/.out} &
             count=$((count+1))
             if [ $count == $parallelCount ]; then
@@ -84,6 +98,7 @@ elif [ $# == 1 ]; then
     elif [ -f instances/*/$1.in.json ]; then
         (echo "OUTPUT FOR TEST: $1 -----------------------------------------"
         python3 proj.py instances/${1/_*/}/$1.in.json instances/${1/_*/}/$1.out.json
+        python3 jsonToDzn.py instances/${1/_*/}/$1.in.json.mzn.json instances/${1/_*/}/$1.dzn
         echo "TEST DONE ---------------------------------------------------") > instances/${1/_*/}/$1.out
     else
         ran_tests=0
