@@ -129,37 +129,9 @@ constraint redundant_constraint(
 
 constraint forall(i in 0..noActivities-1 where isForward(i) /\ isTwoWayTrip(i)) (activityExecutionStatus[i] = activityExecutionStatus[backward(i)] /\ trace("(1)", true));
 
-% 5.1. Ensure that maxWaitTime is enought to satisfy the request
-constraint forall(i in 0..noActivities-1 where happens(i)) (
-  if maxWaitTime < 2*requestBoardingDuration[activityRequest(i)] + distMatrix[activityOrigin(i), activityDestination(i)] 
-    then activityExecutionStatus[i] = Rejected 
-  else true 
-  endif
-  /\ trace("(5.1)", true)
-);
-
-% 6.1. Vehicles that can't reach the activity's origin or destination in time can't be assigned to it
-constraint forall (v in 0..noVehicles-1, i in 0..noActivities-1 where happens(i) /\ vehicleCanTake[v, requestCategory[activityRequest(i)]] /\ activityExecutionStatus[i] == Granted) (
-  if activityStart[i] < vehicleAvailability[v, ShiftStart] + distMatrix[vehicleStart[v], activityOrigin(i)] \/ activityEnd[i] > vehicleAvailability[v, ShiftEnd] + distMatrix[activityDestination(i), vehicleEnd[v]]
-    then activityVehicle[i] != v 
-  else true
-  endif
-  /\ trace("(6.1)", true)
-);
-
-% 8. Allow one-trip requests to be granted
-% - We'll assume that the activity execution status is true for the trip that isn't done.
-
-constraint forall (i in 0..noActivities-1) (if happens(i) then activityExecutionStatus[i] != NotNeeded else activityExecutionStatus[i] = NotNeeded endif /\ trace("(8)", true));
-
-% 7. Given the boolean sameVehicleBackward, we need to ensure it is satisfied
-
-constraint sameVehicleBackward -> forall (i in 0..noActivities-1 where isForward(i) /\ happensForward(i) /\ happensBackward(backward(i)) /\ activityExecutionStatus[i] == Granted) (expandedToOriginalVehicle[activityVehicle[i]] = expandedToOriginalVehicle[activityVehicle[backward(i)]] /\ trace("(7)", true));
-
-
 % 2. Inter-Activity Time Travel Consistency
 
-constraint forall(i, j in 0..noActivities-1 where i < j /\ expandedToOriginalVehicle[activityVehicle[i]] = expandedToOriginalVehicle[activityVehicle[j]] /\ happens(i) /\ happens(j) /\ activityExecutionStatus[i] == Granted /\ activityExecutionStatus[j] == Granted) (
+constraint forall(i, j in 0..noActivities-1 where i != j /\ expandedToOriginalVehicle[activityVehicle[i]] = expandedToOriginalVehicle[activityVehicle[j]] /\ happens(i) /\ happens(j) /\ activityExecutionStatus[i] == Granted /\ activityExecutionStatus[j] == Granted) (
   (
     activityStart[j] - activityStart[i] >= distMatrix[activityOrigin(i), activityOrigin(j)] + requestBoardingDuration[activityRequest(i)] 
     \/ 
@@ -245,6 +217,15 @@ constraint forall(i in 0..noActivities-1 where isBackward(i) /\ happensBackward(
   /\ trace("(5.3)", true)
 );
 
+% 5.1. Ensure that maxWaitTime is enought to satisfy the request
+constraint forall(i in 0..noActivities-1 where happens(i)) (
+  if maxWaitTime < 2*requestBoardingDuration[activityRequest(i)] + distMatrix[activityOrigin(i), activityDestination(i)] 
+    then activityExecutionStatus[i] = Rejected 
+  else true 
+  endif
+  /\ trace("(5.1)", true)
+);
+
 % 6. Ensure that the activity start and end times are consistent with the vehicle's availability
 
 constraint forall (i in 0..noActivities-1 where happens(i) /\ activityExecutionStatus[i] == Granted) (
@@ -255,6 +236,24 @@ constraint forall (i in 0..noActivities-1 where happens(i) /\ activityExecutionS
     - distMatrix[activityDestination(i), vehicleEnd[activityVehicle[i]]])
   /\ trace("(6.2)", true)
 );
+
+% 6.1. Vehicles that can't reach the activity's origin or destination in time can't be assigned to it
+constraint forall (v in 0..noVehicles-1, i in 0..noActivities-1 where happens(i) /\ vehicleCanTake[v, requestCategory[activityRequest(i)]] /\ activityExecutionStatus[i] == Granted) (
+  if activityStart[i] < vehicleAvailability[v, ShiftStart] + distMatrix[vehicleStart[v], activityOrigin(i)] \/ activityEnd[i] > vehicleAvailability[v, ShiftEnd] + distMatrix[activityDestination(i), vehicleEnd[v]]
+    then activityVehicle[i] != v 
+  else true
+  endif
+  /\ trace("(6.1)", true)
+);
+
+% 7. Given the boolean sameVehicleBackward, we need to ensure it is satisfied
+
+constraint sameVehicleBackward -> forall (i in 0..noActivities-1 where isForward(i) /\ happensForward(i) /\ happensBackward(backward(i)) /\ activityExecutionStatus[i] == Granted) (expandedToOriginalVehicle[activityVehicle[i]] = expandedToOriginalVehicle[activityVehicle[backward(i)]] /\ trace("(7)", true));
+
+% 8. Allow one-trip requests to be granted
+% - We'll assume that the activity execution status is true for the trip that isn't done.
+
+constraint forall (i in 0..noActivities-1) (if happens(i) then activityExecutionStatus[i] != NotNeeded else activityExecutionStatus[i] = NotNeeded endif /\ trace("(8)", true));
 
 % ----------------------------------------------
 
