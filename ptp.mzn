@@ -168,10 +168,12 @@ constraint forall(i in 0..noActivities-1 where happens(i) /\ activityExecutionSt
 % 4. Cumulative Resource
 
 constraint forall(j in 0..noVehicles-1) (
+  let {var set of int : vehicleActivities = {i | i in 0..noActivities-1 where activityVehicle[i] = j /\ happens(i) /\ activityExecutionStatus[i] == Granted}}
+  in
   cumulative(
     activityStart,
     activityDuration,
-    array1d(0..noActivities-1, [if act in vehicleActivities then requestLoad[activityRequest(act)] else 0 endif | act in 0..noActivities-1, vehicleActivities = {i | i in 0..noActivities-1 where activityVehicle[i] = j /\ happens(i) /\ activityExecutionStatus[i] == Granted}]),
+    array1d(0..noActivities-1, [if act in vehicleActivities then requestLoad[activityRequest(act)] else 0 endif | act in 0..noActivities-1]),
     vehicleCapacity[j]
   )
   /\ trace("(4)", true)

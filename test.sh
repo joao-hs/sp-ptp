@@ -11,7 +11,7 @@ source .venv/bin/activate
 if [ -z "$1" ]; then
     echo "Running all tests"
     for f in instances/*/*.in.json; do
-        echo $(basename ${f/.in.json/})
+        echo "Started $(basename ${f/.in.json/})"
         (echo "OUTPUT FOR TEST: $(basename ${f/.in.json/})------------------"
         python3 proj.py $f ${f/.in.json/.out.json}
         python3 jsonToDzn.py $f.mzn.json ${f/.in.json/.dzn}
@@ -27,6 +27,7 @@ elif [ $# == 1 ]; then
     if [ $1 == "easiest" ]; then
         echo "Running easiest tests"
         for f in instances/easiest/*.in.json; do
+            echo "Started $(basename ${f/.in.json/})"
             (echo "OUTPUT FOR TEST: $(basename ${f/.in.json/})------------------"
             python3 proj.py $f ${f/.in.json/.out.json}
             python3 jsonToDzn.py $f.mzn.json ${f/.in.json/.dzn}
@@ -41,6 +42,7 @@ elif [ $# == 1 ]; then
     elif [ $1 == "easy" ]; then
         echo "Running easy tests"
         for f in instances/easy/*.in.json; do
+            echo "Started $(basename ${f/.in.json/})"
             (echo "OUTPUT FOR TEST: $(basename ${f/.in.json/})------------------"
             python3 proj.py $f ${f/.in.json/.out.json}
             python3 jsonToDzn.py $f.mzn.json ${f/.in.json/.dzn}
@@ -55,6 +57,7 @@ elif [ $# == 1 ]; then
     elif [ $1 == "medium" ]; then
         echo "Running medium tests"
         for f in instances/medium/*.in.json; do
+            echo "Started $(basename ${f/.in.json/})"
             (echo "OUTPUT FOR TEST: $(basename ${f/.in.json/})------------------"
             python3 proj.py $f ${f/.in.json/.out.json}
             python3 jsonToDzn.py $f.mzn.json ${f/.in.json/.dzn}
@@ -69,6 +72,7 @@ elif [ $# == 1 ]; then
     elif [ $1 == "hard" ]; then
         echo "Running hard tests"
         for f in instances/hard/*.in.json; do
+            echo "Started $(basename ${f/.in.json/})"
             (echo "OUTPUT FOR TEST: $(basename ${f/.in.json/})------------------"
             python3 proj.py $f ${f/.in.json/.out.json}
             python3 jsonToDzn.py $f.mzn.json ${f/.in.json/.dzn}
@@ -83,6 +87,7 @@ elif [ $# == 1 ]; then
     elif [ $1 == "custom" ]; then
         echo "Running custom tests"
         for f in instances/custom/*.in.json; do
+            echo "Started $(basename ${f/.in.json/})"
             (echo "OUTPUT FOR TEST: $(basename ${f/.in.json/})------------------"
             python3 proj.py $f ${f/.in.json/.out.json}
             python3 jsonToDzn.py $f.mzn.json ${f/.in.json/.dzn}

@@ -2,4 +2,5 @@
 .venv
 testing-field
 instances/*/*.mzn.json
+instances/*/*.dzn
 instances/*/*.out

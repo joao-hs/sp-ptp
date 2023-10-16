@@ -1,6 +1,7 @@
 from json import load, dump
 from sys import argv
 from minizinc import Model, Solver, Instance, Status
+from datetime import timedelta
 
 
 # -----------------------------------------------------------------------------
@@ -97,7 +98,7 @@ output_file = open(output_name, 'w')
 data = load(input_file)
 
 model = Model("./ptp.mzn")
-solver = Solver.lookup("gecode")
+solver = Solver.lookup("chuffed")
 instance = Instance(solver, model)
 
 
@@ -301,11 +302,11 @@ dump(
 # }
 
 
-result = instance.solve(optimisation_level=3)
+result = instance.solve(timeout=timedelta(seconds=60-7), free_search=True)
 
 
-if result.status is Status.UNSATISFIABLE:
-    print("UNSATISFIABLE")
+if result.status is not Status.OPTIMAL_SOLUTION:
+    print(result.status.name)
     dump(
         {
             "requests": 0,
