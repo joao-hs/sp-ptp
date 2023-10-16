@@ -1,0 +1,21 @@
+{
+    "requests": 0,
+    "vehicles": [
+        {
+            "id": 98,
+            "trips": []
+        },
+        {
+            "id": 98,
+            "trips": []
+        },
+        {
+            "id": 99,
+            "trips": []
+        },
+        {
+            "id": 99,
+            "trips": []
+        }
+    ]
+}
