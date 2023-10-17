@@ -302,7 +302,7 @@ dump(
 # }
 
 
-result = instance.solve(timeout=timedelta(seconds=60-7), free_search=True)
+result = instance.solve(timeout=timedelta(seconds=50), free_search=True)
 
 
 if result.status is not Status.OPTIMAL_SOLUTION:
@@ -335,7 +335,7 @@ dump(
                     {
                         "origin": placesIndexToId[trip[0]],
                         "destination": placesIndexToId[trip[1]],
-                        "arrival": f"{trip[2]//60}h{trip[2]%60:02d}",
+                        "arrival": f"{trip[2]//60:02d}h{trip[2]%60:02d}",
                         "patients": [patientsIndexToId[patient] for patient in trip[3]]
                     }
                     for trip in vehicleTrips[i]
