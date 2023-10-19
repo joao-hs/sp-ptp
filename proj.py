@@ -2,6 +2,7 @@ from json import load, dump
 from sys import argv
 from minizinc import Model, Solver, Instance, Status
 from datetime import timedelta
+from numpy import pad
 
 
 # -----------------------------------------------------------------------------
@@ -223,7 +224,7 @@ for index, patient in enumerate(data["patients"]):
 for key in requestData:
     instance[key] = requestData[key]
 
-instance["distMatrix"] = data["distMatrix"]
+instance["distMatrix"] = pad(data["distMatrix"], ((1,0), (1,0)), mode='constant')
 
 
 # print("%=============== DATA INPUT TO MINIZINC ===============")
@@ -338,7 +339,7 @@ dump(
                         "arrival": f"{trip[2]//60:02d}h{trip[2]%60:02d}",
                         "patients": [patientsIndexToId[patient] for patient in trip[3]]
                     }
-                    for trip in vehicleTrips[i]
+                    for trip in vehicleTrips[i] if trip[0] != -1 and trip[1] != -1
                 ]
             } for i in range(noTrueVehicles)
         ]

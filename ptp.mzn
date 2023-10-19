@@ -33,7 +33,7 @@ array [0..noRequests-1] of int : requestServiceDuration;
 array [0..noRequests-1] of int : requestCategory;
 array [0..noRequests-1] of int : requestBoardingDuration;
 
-array [0..noPlaces-1, 0..noPlaces-1] of int : distMatrix;
+array [-1..noPlaces-1, -1..noPlaces-1] of int : distMatrix;
 
 
 % Check if parameters are as expected
