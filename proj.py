@@ -304,8 +304,8 @@ dump(
 
 result = instance.solve(timeout=timedelta(seconds=50), free_search=True)
 
-
-if result.status is not Status.OPTIMAL_SOLUTION:
+print("result.status:", result.status)
+if result.status is not Status.OPTIMAL_SOLUTION and result.status is not Status.SATISFIED:
     print(result.status.name)
     dump(
         {

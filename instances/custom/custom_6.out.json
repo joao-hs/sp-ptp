@@ -7,13 +7,13 @@
                 {
                     "origin": 1,
                     "destination": 3,
-                    "arrival": "9h37",
+                    "arrival": "09h39",
                     "patients": []
                 },
                 {
                     "origin": 3,
                     "destination": 4,
-                    "arrival": "9h43",
+                    "arrival": "09h45",
                     "patients": [
                         7
                     ]
@@ -21,7 +21,7 @@
                 {
                     "origin": 4,
                     "destination": 2,
-                    "arrival": "9h49",
+                    "arrival": "09h51",
                     "patients": [
                         7,
                         8
@@ -30,7 +30,7 @@
                 {
                     "origin": 2,
                     "destination": 0,
-                    "arrival": "9h57",
+                    "arrival": "09h57",
                     "patients": [
                         7,
                         8,
@@ -40,7 +40,7 @@
                 {
                     "origin": 0,
                     "destination": 2,
-                    "arrival": "10h38",
+                    "arrival": "10h40",
                     "patients": [
                         6
                     ]
@@ -48,13 +48,13 @@
                 {
                     "origin": 2,
                     "destination": 0,
-                    "arrival": "10h44",
+                    "arrival": "10h46",
                     "patients": []
                 },
                 {
                     "origin": 0,
                     "destination": 3,
-                    "arrival": "10h51",
+                    "arrival": "10h52",
                     "patients": [
                         7
                     ]
@@ -62,7 +62,7 @@
                 {
                     "origin": 3,
                     "destination": 0,
-                    "arrival": "10h57",
+                    "arrival": "10h58",
                     "patients": []
                 },
                 {

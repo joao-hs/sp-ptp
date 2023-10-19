@@ -1,305 +1,363 @@
 {
   "sameVehicleBackward": false,
   "maxWaitTime": "00h30",
-  "places": [{
-    "id": 0,
-    "category": 0
-  }, {
-    "id": 1,
-    "category": 0
-  }, {
-    "id": 2,
-    "category": 0
-  }, {
-    "id": 3,
-    "category": 0
-  }, {
-    "id": 4,
-    "category": 0
-  }, {
-    "id": 5,
-    "category": 0
-  }, {
-    "id": 6,
-    "category": 0
-  }, {
-    "id": 7,
-    "category": 0
-  }, {
-    "id": 8,
-    "category": 0
-  }, {
-    "id": 9,
-    "category": 0
-  }, {
-    "id": 10,
-    "category": 0
-  }, {
-    "id": 11,
-    "category": 0
-  }, {
-    "id": 12,
-    "category": 0
-  }, {
-    "id": 13,
-    "category": 0
-  }, {
-    "id": 14,
-    "category": 0
-  }, {
-    "id": 15,
-    "category": 0
-  }, {
-    "id": 16,
-    "category": 1
-  }, {
-    "id": 17,
-    "category": 1
-  }, {
-    "id": 18,
-    "category": 2
-  }, {
-    "id": 19,
-    "category": 2
-  }, {
-    "id": 20,
-    "category": 2
-  }, {
-    "id": 21,
-    "category": 2
-  }, {
-    "id": 22,
-    "category": 2
-  }, {
-    "id": 23,
-    "category": 2
-  }, {
-    "id": 24,
-    "category": 2
-  }, {
-    "id": 25,
-    "category": 2
-  }, {
-    "id": 26,
-    "category": 2
-  }, {
-    "id": 27,
-    "category": 2
-  }, {
-    "id": 28,
-    "category": 2
-  }, {
-    "id": 29,
-    "category": 2
-  }, {
-    "id": 30,
-    "category": 2
-  }, {
-    "id": 31,
-    "category": 2
-  }, {
-    "id": 32,
-    "category": 2
-  }, {
-    "id": 33,
-    "category": 2
-  }, {
-    "id": 34,
-    "category": 2
-  }, {
-    "id": 35,
-    "category": 2
-  }, {
-    "id": 36,
-    "category": 2
-  }],
-  "vehicles": [{
-    "id": 37,
-    "canTake": [
-      1,
-      2
-    ],
-    "start": 16,
-    "end": 16,
-    "capacity": 3,
-    "availability": [
-      "07h00:16h00",
-      "18h00:20h00"
-    ]
-  }, {
-    "id": 38,
-    "canTake": [
-      0
-    ],
-    "start": 17,
-    "end": 17,
-    "capacity": 3,
-    "availability": [
-      "07h00:13h00",
-      "15h00:20h00"
-    ]
-  }],
-  "patients": [{
-    "id": 39,
-    "category": 1,
-    "load": 3,
-    "start": 18,
-    "destination": 0,
-    "end": 19,
-    "rdvTime": "10h55",
-    "rdvDuration": "01h09",
-    "srvDuration": "00h04"
-  }, {
-    "id": 40,
-    "category": 2,
-    "load": 2,
-    "start": 20,
-    "destination": 1,
-    "end": -1,
-    "rdvTime": "08h39",
-    "rdvDuration": "02h59",
-    "srvDuration": "00h04"
-  }, {
-    "id": 41,
-    "category": 2,
-    "load": 3,
-    "start": 21,
-    "destination": 2,
-    "end": 22,
-    "rdvTime": "08h41",
-    "rdvDuration": "00h48",
-    "srvDuration": "00h02"
-  }, {
-    "id": 42,
-    "category": 2,
-    "load": 1,
-    "start": 23,
-    "destination": 3,
-    "end": 23,
-    "rdvTime": "13h27",
-    "rdvDuration": "02h20",
-    "srvDuration": "00h05"
-  }, {
-    "id": 43,
-    "category": 0,
-    "load": 3,
-    "start": -1,
-    "destination": 4,
-    "end": 24,
-    "rdvTime": "12h58",
-    "rdvDuration": "01h15",
-    "srvDuration": "00h01"
-  }, {
-    "id": 44,
-    "category": 2,
-    "load": 3,
-    "start": 25,
-    "destination": 5,
-    "end": 25,
-    "rdvTime": "15h03",
-    "rdvDuration": "01h47",
-    "srvDuration": "00h05"
-  }, {
-    "id": 45,
-    "category": 0,
-    "load": 3,
-    "start": 26,
-    "destination": 6,
-    "end": 26,
-    "rdvTime": "10h23",
-    "rdvDuration": "02h49",
-    "srvDuration": "00h03"
-  }, {
-    "id": 46,
-    "category": 0,
-    "load": 1,
-    "start": 27,
-    "destination": 7,
-    "end": 27,
-    "rdvTime": "12h52",
-    "rdvDuration": "02h54",
-    "srvDuration": "00h02"
-  }, {
-    "id": 47,
-    "category": 0,
-    "load": 1,
-    "start": 28,
-    "destination": 8,
-    "end": 28,
-    "rdvTime": "13h54",
-    "rdvDuration": "01h40",
-    "srvDuration": "00h04"
-  }, {
-    "id": 48,
-    "category": 2,
-    "load": 1,
-    "start": 29,
-    "destination": 9,
-    "end": 29,
-    "rdvTime": "12h24",
-    "rdvDuration": "01h20",
-    "srvDuration": "00h02"
-  }, {
-    "id": 49,
-    "category": 2,
-    "load": 3,
-    "start": -1,
-    "destination": 10,
-    "end": 30,
-    "rdvTime": "12h55",
-    "rdvDuration": "00h35",
-    "srvDuration": "00h03"
-  }, {
-    "id": 50,
-    "category": 2,
-    "load": 1,
-    "start": 31,
-    "destination": 11,
-    "end": 31,
-    "rdvTime": "11h44",
-    "rdvDuration": "02h58",
-    "srvDuration": "00h04"
-  }, {
-    "id": 51,
-    "category": 1,
-    "load": 3,
-    "start": 32,
-    "destination": 12,
-    "end": 32,
-    "rdvTime": "12h19",
-    "rdvDuration": "02h07",
-    "srvDuration": "00h02"
-  }, {
-    "id": 52,
-    "category": 1,
-    "load": 1,
-    "start": -1,
-    "destination": 13,
-    "end": 33,
-    "rdvTime": "10h43",
-    "rdvDuration": "02h41",
-    "srvDuration": "00h04"
-  }, {
-    "id": 53,
-    "category": 0,
-    "load": 3,
-    "start": 34,
-    "destination": 14,
-    "end": 35,
-    "rdvTime": "08h52",
-    "rdvDuration": "01h04",
-    "srvDuration": "00h04"
-  }, {
-    "id": 54,
-    "category": 2,
-    "load": 3,
-    "start": 36,
-    "destination": 15,
-    "end": 36,
-    "rdvTime": "16h00",
-    "rdvDuration": "00h53",
-    "srvDuration": "00h03"
-  }],
+  "places": [
+    {
+      "id": 0,
+      "category": 0
+    },
+    {
+      "id": 1,
+      "category": 0
+    },
+    {
+      "id": 2,
+      "category": 0
+    },
+    {
+      "id": 3,
+      "category": 0
+    },
+    {
+      "id": 4,
+      "category": 0
+    },
+    {
+      "id": 5,
+      "category": 0
+    },
+    {
+      "id": 6,
+      "category": 0
+    },
+    {
+      "id": 7,
+      "category": 0
+    },
+    {
+      "id": 8,
+      "category": 0
+    },
+    {
+      "id": 9,
+      "category": 0
+    },
+    {
+      "id": 10,
+      "category": 0
+    },
+    {
+      "id": 11,
+      "category": 0
+    },
+    {
+      "id": 12,
+      "category": 0
+    },
+    {
+      "id": 13,
+      "category": 0
+    },
+    {
+      "id": 14,
+      "category": 0
+    },
+    {
+      "id": 15,
+      "category": 0
+    },
+    {
+      "id": 16,
+      "category": 1
+    },
+    {
+      "id": 17,
+      "category": 1
+    },
+    {
+      "id": 18,
+      "category": 2
+    },
+    {
+      "id": 19,
+      "category": 2
+    },
+    {
+      "id": 20,
+      "category": 2
+    },
+    {
+      "id": 21,
+      "category": 2
+    },
+    {
+      "id": 22,
+      "category": 2
+    },
+    {
+      "id": 23,
+      "category": 2
+    },
+    {
+      "id": 24,
+      "category": 2
+    },
+    {
+      "id": 25,
+      "category": 2
+    },
+    {
+      "id": 26,
+      "category": 2
+    },
+    {
+      "id": 27,
+      "category": 2
+    },
+    {
+      "id": 28,
+      "category": 2
+    },
+    {
+      "id": 29,
+      "category": 2
+    },
+    {
+      "id": 30,
+      "category": 2
+    },
+    {
+      "id": 31,
+      "category": 2
+    },
+    {
+      "id": 32,
+      "category": 2
+    },
+    {
+      "id": 33,
+      "category": 2
+    },
+    {
+      "id": 34,
+      "category": 2
+    },
+    {
+      "id": 35,
+      "category": 2
+    },
+    {
+      "id": 36,
+      "category": 2
+    }
+  ],
+  "vehicles": [
+    {
+      "id": 37,
+      "canTake": [
+        1,
+        2
+      ],
+      "start": 16,
+      "end": 16,
+      "capacity": 3,
+      "availability": [
+        "07h00:16h00",
+        "18h00:20h00"
+      ]
+    },
+    {
+      "id": 38,
+      "canTake": [
+        0
+      ],
+      "start": 17,
+      "end": 17,
+      "capacity": 3,
+      "availability": [
+        "07h00:13h00",
+        "15h00:20h00"
+      ]
+    }
+  ],
+  "patients": [
+    {
+      "id": 39,
+      "category": 1,
+      "load": 3,
+      "start": 18,
+      "destination": 0,
+      "end": 19,
+      "rdvTime": "10h55",
+      "rdvDuration": "01h09",
+      "srvDuration": "00h04"
+    },
+    {
+      "id": 40,
+      "category": 2,
+      "load": 2,
+      "start": 20,
+      "destination": 1,
+      "end": -1,
+      "rdvTime": "08h39",
+      "rdvDuration": "02h59",
+      "srvDuration": "00h04"
+    },
+    {
+      "id": 41,
+      "category": 2,
+      "load": 3,
+      "start": 21,
+      "destination": 2,
+      "end": 22,
+      "rdvTime": "08h41",
+      "rdvDuration": "00h48",
+      "srvDuration": "00h02"
+    },
+    {
+      "id": 42,
+      "category": 2,
+      "load": 1,
+      "start": 23,
+      "destination": 3,
+      "end": 23,
+      "rdvTime": "13h27",
+      "rdvDuration": "02h20",
+      "srvDuration": "00h05"
+    },
+    {
+      "id": 43,
+      "category": 0,
+      "load": 3,
+      "start": -1,
+      "destination": 4,
+      "end": 24,
+      "rdvTime": "12h58",
+      "rdvDuration": "01h15",
+      "srvDuration": "00h01"
+    },
+    {
+      "id": 44,
+      "category": 2,
+      "load": 3,
+      "start": 25,
+      "destination": 5,
+      "end": 25,
+      "rdvTime": "15h03",
+      "rdvDuration": "01h47",
+      "srvDuration": "00h05"
+    },
+    {
+      "id": 45,
+      "category": 0,
+      "load": 3,
+      "start": 26,
+      "destination": 6,
+      "end": 26,
+      "rdvTime": "10h23",
+      "rdvDuration": "02h49",
+      "srvDuration": "00h03"
+    },
+    {
+      "id": 46,
+      "category": 0,
+      "load": 1,
+      "start": 27,
+      "destination": 7,
+      "end": 27,
+      "rdvTime": "12h52",
+      "rdvDuration": "02h54",
+      "srvDuration": "00h02"
+    },
+    {
+      "id": 47,
+      "category": 0,
+      "load": 1,
+      "start": 28,
+      "destination": 8,
+      "end": 28,
+      "rdvTime": "13h54",
+      "rdvDuration": "01h40",
+      "srvDuration": "00h04"
+    },
+    {
+      "id": 48,
+      "category": 2,
+      "load": 1,
+      "start": 29,
+      "destination": 9,
+      "end": 29,
+      "rdvTime": "12h24",
+      "rdvDuration": "01h20",
+      "srvDuration": "00h02"
+    },
+    {
+      "id": 49,
+      "category": 2,
+      "load": 3,
+      "start": -1,
+      "destination": 10,
+      "end": 30,
+      "rdvTime": "12h55",
+      "rdvDuration": "00h35",
+      "srvDuration": "00h03"
+    },
+    {
+      "id": 50,
+      "category": 2,
+      "load": 1,
+      "start": 31,
+      "destination": 11,
+      "end": 31,
+      "rdvTime": "11h44",
+      "rdvDuration": "02h58",
+      "srvDuration": "00h04"
+    },
+    {
+      "id": 51,
+      "category": 1,
+      "load": 3,
+      "start": 32,
+      "destination": 12,
+      "end": 32,
+      "rdvTime": "12h19",
+      "rdvDuration": "02h07",
+      "srvDuration": "00h02"
+    },
+    {
+      "id": 52,
+      "category": 1,
+      "load": 1,
+      "start": -1,
+      "destination": 13,
+      "end": 33,
+      "rdvTime": "10h43",
+      "rdvDuration": "02h41",
+      "srvDuration": "00h04"
+    },
+    {
+      "id": 53,
+      "category": 0,
+      "load": 3,
+      "start": 34,
+      "destination": 14,
+      "end": 35,
+      "rdvTime": "08h52",
+      "rdvDuration": "01h04",
+      "srvDuration": "00h04"
+    },
+    {
+      "id": 54,
+      "category": 2,
+      "load": 3,
+      "start": 36,
+      "destination": 15,
+      "end": 36,
+      "rdvTime": "16h00",
+      "rdvDuration": "00h53",
+      "srvDuration": "00h03"
+    }
+  ],
   "distMatrix": [
     [
       0,

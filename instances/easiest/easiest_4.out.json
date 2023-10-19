@@ -11,13 +11,13 @@
                 {
                     "origin": 6,
                     "destination": 15,
-                    "arrival": "9h07",
+                    "arrival": "09h07",
                     "patients": []
                 },
                 {
                     "origin": 15,
                     "destination": 4,
-                    "arrival": "9h11",
+                    "arrival": "09h11",
                     "patients": [
                         25
                     ]
@@ -25,13 +25,13 @@
                 {
                     "origin": 4,
                     "destination": 10,
-                    "arrival": "9h25",
+                    "arrival": "09h29",
                     "patients": []
                 },
                 {
                     "origin": 10,
                     "destination": 0,
-                    "arrival": "9h40",
+                    "arrival": "09h40",
                     "patients": [
                         21
                     ]
@@ -76,7 +76,7 @@
                 {
                     "origin": 8,
                     "destination": 14,
-                    "arrival": "13h00",
+                    "arrival": "13h01",
                     "patients": []
                 },
                 {
@@ -109,7 +109,7 @@
                 {
                     "origin": 9,
                     "destination": 11,
-                    "arrival": "12h28",
+                    "arrival": "12h29",
                     "patients": []
                 },
                 {
@@ -131,13 +131,13 @@
                 {
                     "origin": 12,
                     "destination": 13,
-                    "arrival": "15h27",
+                    "arrival": "15h34",
                     "patients": []
                 },
                 {
                     "origin": 13,
                     "destination": 2,
-                    "arrival": "15h44",
+                    "arrival": "15h50",
                     "patients": [
                         23
                     ]

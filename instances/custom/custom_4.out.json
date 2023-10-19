@@ -7,13 +7,13 @@
                 {
                     "origin": 1,
                     "destination": 2,
-                    "arrival": "7h18",
+                    "arrival": "07h19",
                     "patients": []
                 },
                 {
                     "origin": 2,
                     "destination": 0,
-                    "arrival": "7h27",
+                    "arrival": "07h27",
                     "patients": [
                         4
                     ]
@@ -21,7 +21,7 @@
                 {
                     "origin": 0,
                     "destination": 2,
-                    "arrival": "9h52",
+                    "arrival": "09h52",
                     "patients": [
                         4
                     ]

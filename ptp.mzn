@@ -72,7 +72,7 @@ enum Status = {Granted, Rejected, NotNeeded};
 % Decision Variables
 
 array [0..noActivities-1] of var 0..DAY_IN_MINUTES : activityStart;
-array [0..noActivities-1] of var 0..DAY_IN_MINUTES : activityDuration;
+array [0..noActivities-1] of var 0..maxWaitTime : activityDuration;
 array [0..noActivities-1] of var 0..DAY_IN_MINUTES : activityEnd;
 array [0..noActivities-1] of var Status : activityExecutionStatus;
 array [0..noActivities-1] of var 0..noVehicles-1 : activityVehicle;

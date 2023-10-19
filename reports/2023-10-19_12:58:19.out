@@ -1,0 +1,780 @@
+Results for custom_1:
+  result.status: OPTIMAL_SOLUTION
+  grantedRequests = 1
+    noRequests = 1;
+    noOriginalVehicles = 1;
+    noCategories = 1;
+  Completed in .577072317 seconds.
+
+Results for custom_2:
+  result.status: OPTIMAL_SOLUTION
+  grantedRequests = 2
+    noRequests = 2;
+    noOriginalVehicles = 2;
+    noCategories = 2;
+  Completed in .717600928 seconds.
+
+Results for custom_3:
+  result.status: OPTIMAL_SOLUTION
+  grantedRequests = 1
+    noRequests = 1;
+    noOriginalVehicles = 2;
+    noCategories = 2;
+  Completed in .613292790 seconds.
+
+Results for custom_4:
+  result.status: OPTIMAL_SOLUTION
+  grantedRequests = 1
+    noRequests = 1;
+    noOriginalVehicles = 1;
+    noCategories = 1;
+  Completed in .561797076 seconds.
+
+Results for custom_5:
+  result.status: OPTIMAL_SOLUTION
+  grantedRequests = 1
+    noRequests = 1;
+    noOriginalVehicles = 1;
+    noCategories = 1;
+  Completed in .574840353 seconds.
+
+Results for custom_6:
+  result.status: OPTIMAL_SOLUTION
+  grantedRequests = 3
+    noRequests = 3;
+    noOriginalVehicles = 1;
+    noCategories = 1;
+  Completed in .804368319 seconds.
+
+Results for custom_7:
+  result.status: OPTIMAL_SOLUTION
+  grantedRequests = 3
+    noRequests = 3;
+    noOriginalVehicles = 1;
+    noCategories = 1;
+  Completed in .818713910 seconds.
+
+Results for custom_8:
+  result.status: OPTIMAL_SOLUTION
+  grantedRequests = 2
+    noRequests = 2;
+    noOriginalVehicles = 1;
+    noCategories = 1;
+  Completed in .662333350 seconds.
+
+Results for custom_toy_example:
+  result.status: OPTIMAL_SOLUTION
+  grantedRequests = 1
+    noRequests = 2;
+    noOriginalVehicles = 1;
+    noCategories = 1;
+  Completed in .665442226 seconds.
+
+Results for easiest_1:
+  result.status: OPTIMAL_SOLUTION
+  grantedRequests = 1
+    noRequests = 1;
+    noOriginalVehicles = 2;
+    noCategories = 3;
+  Completed in .492122352 seconds.
+
+Results for easiest_2:
+  result.status: OPTIMAL_SOLUTION
+  grantedRequests = 8
+    noRequests = 10;
+    noOriginalVehicles = 1;
+    noCategories = 3;
+  Completed in 1.726044475 seconds.
+
+Results for easiest_3:
+  result.status: OPTIMAL_SOLUTION
+  grantedRequests = 5
+    noRequests = 5;
+    noOriginalVehicles = 5;
+    noCategories = 3;
+  Completed in 1.170087016 seconds.
+
+Results for easiest_4:
+  result.status: OPTIMAL_SOLUTION
+  grantedRequests = 5
+    noRequests = 5;
+    noOriginalVehicles = 5;
+    noCategories = 3;
+  Completed in 1.246106774 seconds.
+
+Results for easy_10:
+  result.status: UNKNOWN
+  TIMEOUT
+    noRequests = 128;
+    noOriginalVehicles = 12;
+    noCategories = 1;
+
+Results for easy_11:
+  result.status: UNKNOWN
+  TIMEOUT
+    noRequests = 96;
+    noOriginalVehicles = 9;
+    noCategories = 1;
+
+Results for easy_12:
+  result.status: OPTIMAL_SOLUTION
+  grantedRequests = 48
+    noRequests = 48;
+    noOriginalVehicles = 5;
+    noCategories = 1;
+  Completed in 20.542298716 seconds.
+
+Results for easy_13:
+  result.status: SATISFIED
+  grantedRequests = 39
+    noRequests = 80;
+    noOriginalVehicles = 8;
+    noCategories = 1;
+  Completed in 56.341311915 seconds.
+
+Results for easy_14:
+  result.status: SATISFIED
+  grantedRequests = 55
+    noRequests = 64;
+    noOriginalVehicles = 6;
+    noCategories = 1;
+  Completed in 54.672549227 seconds.
+
+Results for easy_15:
+  result.status: OPTIMAL_SOLUTION
+  grantedRequests = 15
+    noRequests = 16;
+    noOriginalVehicles = 2;
+    noCategories = 1;
+  Completed in 2.601179672 seconds.
+
+Results for easy_16:
+  result.status: UNKNOWN
+  TIMEOUT
+    noRequests = 160;
+    noOriginalVehicles = 16;
+    noCategories = 1;
+
+Results for easy_17:
+  result.status: OPTIMAL_SOLUTION
+  grantedRequests = 13
+    noRequests = 16;
+    noOriginalVehicles = 2;
+    noCategories = 1;
+  Completed in 3.191434750 seconds.
+
+Results for easy_18:
+  
+  TIMEOUT
+    noRequests = 96;
+    noOriginalVehicles = 9;
+    noCategories = 1;
+
+Results for easy_19:
+  result.status: UNKNOWN
+  TIMEOUT
+    noRequests = 160;
+    noOriginalVehicles = 16;
+    noCategories = 1;
+
+Results for easy_1:
+  result.status: UNKNOWN
+  TIMEOUT
+    noRequests = 112;
+    noOriginalVehicles = 10;
+    noCategories = 1;
+
+Results for easy_20:
+  result.status: SATISFIED
+  grantedRequests = 32
+    noRequests = 80;
+    noOriginalVehicles = 8;
+    noCategories = 1;
+  Completed in 56.446427575 seconds.
+
+Results for easy_21:
+  result.status: UNKNOWN
+  TIMEOUT
+    noRequests = 144;
+    noOriginalVehicles = 14;
+    noCategories = 1;
+
+Results for easy_22:
+  result.status: OPTIMAL_SOLUTION
+  grantedRequests = 48
+    noRequests = 48;
+    noOriginalVehicles = 5;
+    noCategories = 1;
+  Completed in 29.875232657 seconds.
+
+Results for easy_23:
+  result.status: UNKNOWN
+  TIMEOUT
+    noRequests = 160;
+    noOriginalVehicles = 16;
+    noCategories = 1;
+
+Results for easy_24:
+  result.status: SATISFIED
+  grantedRequests = 63
+    noRequests = 64;
+    noOriginalVehicles = 6;
+    noCategories = 1;
+  Completed in 53.927464125 seconds.
+
+Results for easy_25:
+  result.status: OPTIMAL_SOLUTION
+  grantedRequests = 16
+    noRequests = 16;
+    noOriginalVehicles = 2;
+    noCategories = 1;
+  Completed in 2.641375282 seconds.
+
+Results for easy_26:
+  result.status: UNKNOWN
+  TIMEOUT
+    noRequests = 144;
+    noOriginalVehicles = 14;
+    noCategories = 1;
+
+Results for easy_27:
+  result.status: OPTIMAL_SOLUTION
+  grantedRequests = 28
+    noRequests = 48;
+    noOriginalVehicles = 5;
+    noCategories = 1;
+  Completed in 23.580721587 seconds.
+
+Results for easy_28:
+  result.status: SATISFIED
+  grantedRequests = 40
+    noRequests = 80;
+    noOriginalVehicles = 8;
+    noCategories = 1;
+  Completed in 56.413787947 seconds.
+
+Results for easy_29:
+  result.status: UNKNOWN
+  TIMEOUT
+    noRequests = 112;
+    noOriginalVehicles = 10;
+    noCategories = 1;
+
+Results for easy_2:
+  result.status: OPTIMAL_SOLUTION
+  grantedRequests = 32
+    noRequests = 32;
+    noOriginalVehicles = 4;
+    noCategories = 1;
+  Completed in 9.174142347 seconds.
+
+Results for easy_30:
+  result.status: UNKNOWN
+  TIMEOUT
+    noRequests = 112;
+    noOriginalVehicles = 10;
+    noCategories = 1;
+
+Results for easy_3:
+  result.status: OPTIMAL_SOLUTION
+  grantedRequests = 30
+    noRequests = 32;
+    noOriginalVehicles = 4;
+    noCategories = 1;
+  Completed in 47.321251452 seconds.
+
+Results for easy_4:
+  result.status: UNKNOWN
+  TIMEOUT
+    noRequests = 96;
+    noOriginalVehicles = 9;
+    noCategories = 1;
+
+Results for easy_5:
+  result.status: UNKNOWN
+  TIMEOUT
+    noRequests = 128;
+    noOriginalVehicles = 12;
+    noCategories = 1;
+
+Results for easy_6:
+  result.status: UNKNOWN
+  TIMEOUT
+    noRequests = 128;
+    noOriginalVehicles = 12;
+    noCategories = 1;
+
+Results for easy_7:
+  result.status: OPTIMAL_SOLUTION
+  grantedRequests = 32
+    noRequests = 32;
+    noOriginalVehicles = 4;
+    noCategories = 1;
+  Completed in 8.656649274 seconds.
+
+Results for easy_8:
+  result.status: UNKNOWN
+  TIMEOUT
+    noRequests = 144;
+    noOriginalVehicles = 14;
+    noCategories = 1;
+
+Results for easy_9:
+  result.status: SATISFIED
+  grantedRequests = 55
+    noRequests = 64;
+    noOriginalVehicles = 6;
+    noCategories = 1;
+  Completed in 54.350610729 seconds.
+
+Results for hard_10:
+  result.status: UNKNOWN
+  TIMEOUT
+    noRequests = 128;
+    noOriginalVehicles = 8;
+    noCategories = 3;
+
+Results for hard_11:
+  result.status: OPTIMAL_SOLUTION
+  grantedRequests = 19
+    noRequests = 32;
+    noOriginalVehicles = 3;
+    noCategories = 3;
+  Completed in 11.237673067 seconds.
+
+Results for hard_12:
+  result.status: UNKNOWN
+  TIMEOUT
+    noRequests = 160;
+    noOriginalVehicles = 8;
+    noCategories = 3;
+
+Results for hard_13:
+  
+  TIMEOUT
+    noRequests = 96;
+    noOriginalVehicles = 5;
+    noCategories = 3;
+
+Results for hard_14:
+  result.status: UNKNOWN
+  TIMEOUT
+    noRequests = 96;
+    noOriginalVehicles = 5;
+    noCategories = 3;
+
+Results for hard_15:
+  result.status: OPTIMAL_SOLUTION
+  grantedRequests = 17
+    noRequests = 32;
+    noOriginalVehicles = 3;
+    noCategories = 3;
+  Completed in 10.595608649 seconds.
+
+Results for hard_16:
+  result.status: OPTIMAL_SOLUTION
+  grantedRequests = 10
+    noRequests = 16;
+    noOriginalVehicles = 2;
+    noCategories = 3;
+  Completed in 3.059491031 seconds.
+
+Results for hard_17:
+  
+  TIMEOUT
+    noRequests = 96;
+    noOriginalVehicles = 5;
+    noCategories = 3;
+
+Results for hard_18:
+  result.status: SATISFIED
+  grantedRequests = 15
+    noRequests = 80;
+    noOriginalVehicles = 5;
+    noCategories = 3;
+  Completed in 56.495650040 seconds.
+
+Results for hard_19:
+  result.status: SATISFIED
+  grantedRequests = 18
+    noRequests = 64;
+    noOriginalVehicles = 4;
+    noCategories = 3;
+  Completed in 54.744666131 seconds.
+
+Results for hard_1:
+  result.status: UNKNOWN
+  TIMEOUT
+    noRequests = 112;
+    noOriginalVehicles = 6;
+    noCategories = 3;
+
+Results for hard_20:
+  result.status: UNKNOWN
+  TIMEOUT
+    noRequests = 144;
+    noOriginalVehicles = 8;
+    noCategories = 3;
+
+Results for hard_21:
+  result.status: OPTIMAL_SOLUTION
+  grantedRequests = 8
+    noRequests = 16;
+    noOriginalVehicles = 2;
+    noCategories = 3;
+  Completed in 3.052971960 seconds.
+
+Results for hard_22:
+  result.status: UNKNOWN
+  TIMEOUT
+    noRequests = 128;
+    noOriginalVehicles = 8;
+    noCategories = 3;
+
+Results for hard_23:
+  result.status: UNKNOWN
+  TIMEOUT
+    noRequests = 144;
+    noOriginalVehicles = 8;
+    noCategories = 3;
+
+Results for hard_24:
+  result.status: UNKNOWN
+  TIMEOUT
+    noRequests = 112;
+    noOriginalVehicles = 6;
+    noCategories = 3;
+
+Results for hard_25:
+  result.status: SATISFIED
+  grantedRequests = 4
+    noRequests = 80;
+    noOriginalVehicles = 5;
+    noCategories = 3;
+  Completed in 56.677849737 seconds.
+
+Results for hard_26:
+  result.status: UNKNOWN
+  TIMEOUT
+    noRequests = 144;
+    noOriginalVehicles = 8;
+    noCategories = 3;
+
+Results for hard_27:
+  result.status: UNKNOWN
+  TIMEOUT
+    noRequests = 112;
+    noOriginalVehicles = 6;
+    noCategories = 3;
+
+Results for hard_28:
+  result.status: SATISFIED
+  grantedRequests = 30
+    noRequests = 48;
+    noOriginalVehicles = 4;
+    noCategories = 3;
+  Completed in 53.770748669 seconds.
+
+Results for hard_29:
+  result.status: UNKNOWN
+  TIMEOUT
+    noRequests = 128;
+    noOriginalVehicles = 8;
+    noCategories = 3;
+
+Results for hard_2:
+  result.status: SATISFIED
+  grantedRequests = 28
+    noRequests = 80;
+    noOriginalVehicles = 5;
+    noCategories = 3;
+  Completed in 56.252150323 seconds.
+
+Results for hard_30:
+  result.status: OPTIMAL_SOLUTION
+  grantedRequests = 8
+    noRequests = 16;
+    noOriginalVehicles = 2;
+    noCategories = 3;
+  Completed in 3.396898583 seconds.
+
+Results for hard_3:
+  result.status: UNKNOWN
+  TIMEOUT
+    noRequests = 160;
+    noOriginalVehicles = 8;
+    noCategories = 3;
+
+Results for hard_4:
+  result.status: SATISFIED
+  grantedRequests = 29
+    noRequests = 64;
+    noOriginalVehicles = 4;
+    noCategories = 3;
+  Completed in 54.858453304 seconds.
+
+Results for hard_5:
+  result.status: SATISFIED
+  grantedRequests = 27
+    noRequests = 48;
+    noOriginalVehicles = 4;
+    noCategories = 3;
+  Completed in 53.337789368 seconds.
+
+Results for hard_6:
+  result.status: OPTIMAL_SOLUTION
+  grantedRequests = 23
+    noRequests = 48;
+    noOriginalVehicles = 4;
+    noCategories = 3;
+  Completed in 28.334549773 seconds.
+
+Results for hard_7:
+  result.status: OPTIMAL_SOLUTION
+  grantedRequests = 19
+    noRequests = 32;
+    noOriginalVehicles = 3;
+    noCategories = 3;
+  Completed in 11.767807756 seconds.
+
+Results for hard_8:
+  result.status: UNKNOWN
+  TIMEOUT
+    noRequests = 160;
+    noOriginalVehicles = 8;
+    noCategories = 3;
+
+Results for hard_9:
+  result.status: SATISFIED
+  grantedRequests = 29
+    noRequests = 64;
+    noOriginalVehicles = 4;
+    noCategories = 3;
+  Completed in 54.924394323 seconds.
+
+Results for medium_10:
+  result.status: UNKNOWN
+  TIMEOUT
+    noRequests = 144;
+    noOriginalVehicles = 8;
+    noCategories = 2;
+
+Results for medium_11:
+  result.status: SATISFIED
+  grantedRequests = 35
+    noRequests = 48;
+    noOriginalVehicles = 4;
+    noCategories = 2;
+  Completed in 53.601101552 seconds.
+
+Results for medium_12:
+  result.status: SATISFIED
+  grantedRequests = 39
+    noRequests = 64;
+    noOriginalVehicles = 4;
+    noCategories = 2;
+  Completed in 54.331149487 seconds.
+
+Results for medium_13:
+  result.status: OPTIMAL_SOLUTION
+  grantedRequests = 14
+    noRequests = 16;
+    noOriginalVehicles = 2;
+    noCategories = 2;
+  Completed in 2.725646737 seconds.
+
+Results for medium_14:
+  result.status: OPTIMAL_SOLUTION
+  grantedRequests = 28
+    noRequests = 32;
+    noOriginalVehicles = 3;
+    noCategories = 2;
+  Completed in 9.493551879 seconds.
+
+Results for medium_15:
+  result.status: OPTIMAL_SOLUTION
+  grantedRequests = 22
+    noRequests = 32;
+    noOriginalVehicles = 3;
+    noCategories = 2;
+  Completed in 18.661417700 seconds.
+
+Results for medium_16:
+  result.status: SATISFIED
+  grantedRequests = 26
+    noRequests = 80;
+    noOriginalVehicles = 5;
+    noCategories = 2;
+  Completed in 56.122642896 seconds.
+
+Results for medium_17:
+  result.status: UNKNOWN
+  TIMEOUT
+    noRequests = 128;
+    noOriginalVehicles = 8;
+    noCategories = 2;
+
+Results for medium_18:
+  result.status: OPTIMAL_SOLUTION
+  grantedRequests = 20
+    noRequests = 32;
+    noOriginalVehicles = 3;
+    noCategories = 2;
+  Completed in 11.105236243 seconds.
+
+Results for medium_19:
+  result.status: SATISFIED
+  grantedRequests = 27
+    noRequests = 80;
+    noOriginalVehicles = 5;
+    noCategories = 2;
+  Completed in 56.061375914 seconds.
+
+Results for medium_1:
+  result.status: UNKNOWN
+  TIMEOUT
+    noRequests = 112;
+    noOriginalVehicles = 6;
+    noCategories = 2;
+
+Results for medium_20:
+  result.status: SATISFIED
+  grantedRequests = 34
+    noRequests = 64;
+    noOriginalVehicles = 4;
+    noCategories = 2;
+  Completed in 54.985121862 seconds.
+
+Results for medium_21:
+  result.status: UNKNOWN
+  TIMEOUT
+    noRequests = 128;
+    noOriginalVehicles = 8;
+    noCategories = 2;
+
+Results for medium_22:
+  result.status: OPTIMAL_SOLUTION
+  grantedRequests = 12
+    noRequests = 16;
+    noOriginalVehicles = 2;
+    noCategories = 2;
+  Completed in 3.213790172 seconds.
+
+Results for medium_23:
+  result.status: OPTIMAL_SOLUTION
+  grantedRequests = 11
+    noRequests = 16;
+    noOriginalVehicles = 2;
+    noCategories = 2;
+  Completed in 3.308119867 seconds.
+
+Results for medium_24:
+  result.status: SATISFIED
+  grantedRequests = 36
+    noRequests = 80;
+    noOriginalVehicles = 5;
+    noCategories = 2;
+  Completed in 55.807259172 seconds.
+
+Results for medium_25:
+  result.status: SATISFIED
+  grantedRequests = 33
+    noRequests = 48;
+    noOriginalVehicles = 4;
+    noCategories = 2;
+  Completed in 53.410400808 seconds.
+
+Results for medium_26:
+  result.status: UNKNOWN
+  TIMEOUT
+    noRequests = 160;
+    noOriginalVehicles = 9;
+    noCategories = 2;
+
+Results for medium_27:
+  result.status: UNKNOWN
+  TIMEOUT
+    noRequests = 160;
+    noOriginalVehicles = 9;
+    noCategories = 2;
+
+Results for medium_28:
+  result.status: UNKNOWN
+  TIMEOUT
+    noRequests = 96;
+    noOriginalVehicles = 5;
+    noCategories = 2;
+
+Results for medium_29:
+  result.status: UNKNOWN
+  TIMEOUT
+    noRequests = 112;
+    noOriginalVehicles = 6;
+    noCategories = 2;
+
+Results for medium_2:
+  result.status: SATISFIED
+  grantedRequests = 4
+    noRequests = 96;
+    noOriginalVehicles = 5;
+    noCategories = 2;
+  Completed in 58.147454621 seconds.
+
+Results for medium_30:
+  result.status: UNKNOWN
+  TIMEOUT
+    noRequests = 144;
+    noOriginalVehicles = 8;
+    noCategories = 2;
+
+Results for medium_3:
+  result.status: UNKNOWN
+  TIMEOUT
+    noRequests = 160;
+    noOriginalVehicles = 9;
+    noCategories = 2;
+
+Results for medium_4:
+  result.status: UNKNOWN
+  TIMEOUT
+    noRequests = 128;
+    noOriginalVehicles = 8;
+    noCategories = 2;
+
+Results for medium_5:
+  result.status: SATISFIED
+  grantedRequests = 33
+    noRequests = 48;
+    noOriginalVehicles = 4;
+    noCategories = 2;
+  Completed in 53.194887342 seconds.
+
+Results for medium_6:
+  result.status: UNKNOWN
+  TIMEOUT
+    noRequests = 112;
+    noOriginalVehicles = 6;
+    noCategories = 2;
+
+Results for medium_7:
+  result.status: UNKNOWN
+  TIMEOUT
+    noRequests = 96;
+    noOriginalVehicles = 5;
+    noCategories = 2;
+
+Results for medium_8:
+  result.status: SATISFIED
+  grantedRequests = 27
+    noRequests = 64;
+    noOriginalVehicles = 4;
+    noCategories = 2;
+  Completed in 54.950448849 seconds.
+
+Results for medium_9:
+  result.status: UNKNOWN
+  TIMEOUT
+    noRequests = 144;
+    noOriginalVehicles = 8;
+    noCategories = 2;
+

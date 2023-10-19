@@ -40,13 +40,13 @@
                 {
                     "origin": 8,
                     "destination": 14,
-                    "arrival": "9h09",
+                    "arrival": "09h10",
                     "patients": []
                 },
                 {
                     "origin": 14,
                     "destination": 4,
-                    "arrival": "9h24",
+                    "arrival": "09h24",
                     "patients": [
                         24
                     ]
@@ -54,7 +54,7 @@
                 {
                     "origin": 4,
                     "destination": 13,
-                    "arrival": "10h18",
+                    "arrival": "10h19",
                     "patients": []
                 },
                 {
@@ -82,7 +82,7 @@
                 {
                     "origin": 1,
                     "destination": 4,
-                    "arrival": "12h02",
+                    "arrival": "12h03",
                     "patients": []
                 },
                 {
@@ -110,7 +110,7 @@
                 {
                     "origin": 0,
                     "destination": 1,
-                    "arrival": "14h17",
+                    "arrival": "14h18",
                     "patients": []
                 },
                 {
@@ -124,7 +124,7 @@
                 {
                     "origin": 11,
                     "destination": 0,
-                    "arrival": "14h55",
+                    "arrival": "14h56",
                     "patients": []
                 },
                 {
@@ -149,7 +149,7 @@
                 {
                     "origin": 9,
                     "destination": 12,
-                    "arrival": "10h55",
+                    "arrival": "11h01",
                     "patients": []
                 },
                 {
