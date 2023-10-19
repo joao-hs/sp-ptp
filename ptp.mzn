@@ -93,7 +93,8 @@ predicate simultaneous(int: activity1, int: activity2) = (activityStart[activity
 
 var 0..noRequests : grantedRequests = count(i in 0..noActivities-1 where isForward(i))(activityExecutionStatus[i] != Rejected /\ activityExecutionStatus[backward(i)] != Rejected);
 
-solve maximize grantedRequests;
+solve :: int_search(activityStart, input_order, indomain_min)
+maximize grantedRequests;
 
 output ["grantedRequests = ", show(grantedRequests), "\n"];
 output ["activityStart = ", show(activityStart), "\n"];
