@@ -187,7 +187,7 @@ constraint forall(i in 0..noActivities-1 where isForward(i) /\ happensForward(i)
     (requestServiceStartTime[activityRequest(i)] - maxWaitTime)
     ..
     % maximum case: the vehicle arrives the patient's start location and goes directly to the medical center
-    (requestServiceStartTime[activityRequest(i)] - 2*requestBoardingDuration[activityRequest(i)] - distMatrix[requestDestination[activityRequest(i)], requestStart[activityRequest(i)]])
+    (requestServiceStartTime[activityRequest(i)] - 2*requestBoardingDuration[activityRequest(i)] - distMatrix[requestStart[activityRequest(i)], requestDestination[activityRequest(i)]])
   )
   /\
   (activityEnd[i] in 
