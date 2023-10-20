@@ -36,10 +36,10 @@ def get_trips_by_vehicle(activityStart : list, activityEnd : list, activityVehic
         if actExecStatus == 'Granted':
             if partialActivity % 2 == 0: # forward
                 vehicleTripsAux[actVehicle].append((requestData["requestStart"][patient], actStart, patient)) 
-                vehicleTripsAux[actVehicle].append((requestData["requestDestination"][patient], actEnd, patient))               
+                vehicleTripsAux[actVehicle].append((requestData["requestDestination"][patient], actEnd - requestData["requestBoardingDuration"][patient], patient))               
             else: # backward
                 vehicleTripsAux[actVehicle].append((requestData["requestDestination"][patient], actStart, patient))
-                vehicleTripsAux[actVehicle].append((requestData["requestReturn"][patient], actEnd, patient))
+                vehicleTripsAux[actVehicle].append((requestData["requestReturn"][patient], actEnd - requestData["requestBoardingDuration"][patient], patient))
 
 
     onboardPatients = list()
@@ -54,18 +54,18 @@ def get_trips_by_vehicle(activityStart : list, activityEnd : list, activityVehic
 
         # vehicleTripsAux[vehicle].sort(key=lambda x: x[1]) # sort by arrival time
         # trip tuple ~ (origin, destination, arrival, patients)
-        (origin, arrival, patient) = tripsForVehicle.pop(0)
-        vehicleTrips[vehicleIndex].append((vehicleData["vehicleStart"][vehicleIndex], origin, arrival, set())) # first trip is from vehicle start to first patient
+        (origin, activityTimestamp, patient) = tripsForVehicle.pop(0)
+        vehicleTrips[vehicleIndex].append((vehicleData["vehicleStart"][vehicleIndex], origin, activityTimestamp, set())) # first trip is from vehicle start to first patient
         onboardPatients.append(patient) # first patient gets onboard
         
         while tripsForVehicle:
-            (destination, arrival, patient) = tripsForVehicle.pop(0)
+            (destination, activityTimestamp, patient) = tripsForVehicle.pop(0)
             isPatientOnboard = patient in onboardPatients
             if (origin != destination):
                 vehicleTrips[vehicleIndex].append(
                     (origin, 
                      destination, 
-                     arrival - requestData["requestBoardingDuration"][patient] if isPatientOnboard else arrival, 
+                     activityTimestamp, 
                      onboardPatients.copy())
                 )
             if isPatientOnboard: # if the activity is associated with the patient and they are onboard, they are now offboarding
@@ -77,7 +77,8 @@ def get_trips_by_vehicle(activityStart : list, activityEnd : list, activityVehic
         vehicleTrips[vehicleIndex].append((
             origin, 
             vehicleData["vehicleEnd"][vehicleIndex],
-            arrival+ # last arrival time plus
+            activityTimestamp + # last arrival time plus
+            requestData["requestBoardingDuration"][patient] + # the time it takes to offboard the last patient plus
             data["distMatrix"][destination][vehicleData["vehicleEnd"][vehicleIndex]], # the time it takes to go from the current location to the vehicle depot
             onboardPatients.copy() # should be empty
             )) # the last trip is to the vehicle depot
