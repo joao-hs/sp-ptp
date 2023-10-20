@@ -25,12 +25,9 @@ def get_place_category(place : int) -> str:
 def get_trips_by_vehicle(activityStart : list, activityEnd : list, activityVehicle: list, activityExecutionStatus: list) -> dict:
     global noVehicles, noTrueVehicles, noRequests
 
+    # auxiliary tuple ~ (location, arrival, associatedPatient)
     vehicleTripsAux = {i:list() for i in range(noVehicles)}
 
-    # auxiliary tuple ~ (location, arrival, associatedPatient)
-    vehicleTrips = {
-        i: list() for i in range(noTrueVehicles)
-    }
     for partialActivity, (actStart, actEnd, actVehicle, actExecStatus) in enumerate(zip(activityStart, activityEnd, activityVehicle, activityExecutionStatus)):
         patient = partialActivity // 2
         if actExecStatus == 'Granted':
@@ -41,48 +38,54 @@ def get_trips_by_vehicle(activityStart : list, activityEnd : list, activityVehic
                 vehicleTripsAux[actVehicle].append((requestData["requestDestination"][patient], actStart, patient))
                 vehicleTripsAux[actVehicle].append((requestData["requestReturn"][patient], actEnd - requestData["requestBoardingDuration"][patient], patient))
 
+    vehicleTrips = {
+        i: list() for i in range(noTrueVehicles)
+    }
 
-    onboardPatients = list()
+    
     for vehicleIndex in range(noTrueVehicles):
-        tripsForVehicle = [trip 
-                           for vehicleShift in range(vehiclesIdToIndexRange[vehiclesIndexToId[vehicleIndex]][0], vehiclesIdToIndexRange[vehiclesIndexToId[vehicleIndex]][1]+1) 
-                            for trip in vehicleTripsAux[vehicleShift]]
-        if not tripsForVehicle:
-            continue
         
-        tripsForVehicle.sort(key=lambda x: x[1])
+        for vehicleShift in range(vehiclesIdToIndexRange[vehiclesIndexToId[vehicleIndex]][0], vehiclesIdToIndexRange[vehiclesIndexToId[vehicleIndex]][1]+1):
+            shiftTrips = vehicleTripsAux[vehicleShift]
+            if not shiftTrips:
+                continue
+            onboardPatients = list()
+            
+            shiftTrips.sort(key=lambda x: x[1]) # sort by arrival time
 
-        # vehicleTripsAux[vehicle].sort(key=lambda x: x[1]) # sort by arrival time
-        # trip tuple ~ (origin, destination, arrival, patients)
-        (origin, activityTimestamp, patient) = tripsForVehicle.pop(0)
-        vehicleTrips[vehicleIndex].append((vehicleData["vehicleStart"][vehicleIndex], origin, activityTimestamp, set())) # first trip is from vehicle start to first patient
-        onboardPatients.append(patient) # first patient gets onboard
+            # vehicleTripsAux[vehicle].sort(key=lambda x: x[1]) # sort by arrival time
+            # trip tuple ~ (origin, destination, arrival, patients)
+            (origin, activityTimestamp, patient) = shiftTrips.pop(0)
+            vehicleTrips[vehicleIndex].append((vehicleData["vehicleStart"][vehicleShift], origin, activityTimestamp, set())) # first trip is from vehicle start to first patient
+            onboardPatients.append(patient) # first patient gets onboard
+
+            while shiftTrips:
+                (destination, activityTimestamp, patient) = shiftTrips.pop(0)
+                isPatientOnboard = patient in onboardPatients
+                if (origin != destination):
+                    vehicleTrips[vehicleIndex].append(
+                        (origin, 
+                        destination, 
+                        activityTimestamp, 
+                        onboardPatients.copy())
+                    )
+                if isPatientOnboard: # if the activity is associated with the patient and they are onboard, they are now offboarding
+                    onboardPatients.remove(patient)
+                else: # otherwise, they are now onboarding
+                    onboardPatients.append(patient)
+                origin=destination # the next origin is the current destination
+            
+            vehicleTrips[vehicleIndex].append((
+                origin, 
+                vehicleData["vehicleEnd"][vehicleShift],
+                activityTimestamp + # last arrival time plus
+                requestData["requestBoardingDuration"][patient] + # the time it takes to offboard the last patient plus
+            data["distMatrix"][destination][vehicleData["vehicleEnd"][vehicleShift]], # the time it takes to go from the current location to the vehicle depot
+                onboardPatients.copy() # should be empty
+                )) # the last trip is to the vehicle depot
         
-        while tripsForVehicle:
-            (destination, activityTimestamp, patient) = tripsForVehicle.pop(0)
-            isPatientOnboard = patient in onboardPatients
-            if (origin != destination):
-                vehicleTrips[vehicleIndex].append(
-                    (origin, 
-                     destination, 
-                     activityTimestamp, 
-                     onboardPatients.copy())
-                )
-            if isPatientOnboard: # if the activity is associated with the patient and they are onboard, they are now offboarding
-                onboardPatients.remove(patient)
-            else: # otherwise, they are now onboarding
-                onboardPatients.append(patient)
-            origin=destination # the next origin is the current destination
-        
-        vehicleTrips[vehicleIndex].append((
-            origin, 
-            vehicleData["vehicleEnd"][vehicleIndex],
-            activityTimestamp + # last arrival time plus
-            requestData["requestBoardingDuration"][patient] + # the time it takes to offboard the last patient plus
-            data["distMatrix"][destination][vehicleData["vehicleEnd"][vehicleIndex]], # the time it takes to go from the current location to the vehicle depot
-            onboardPatients.copy() # should be empty
-            )) # the last trip is to the vehicle depot
-        
+        vehicleTrips[vehicleIndex].sort(key=lambda x: x[2])
+    
     return vehicleTrips
 
 
@@ -276,7 +279,7 @@ dump(
         "requestServiceDuration": requestData["requestServiceDuration"],
         "requestCategory": requestData["requestCategory"],
         "requestBoardingDuration": requestData["requestBoardingDuration"],
-        "distMatrix": data["distMatrix"]
+        "distMatrix": pad(data["distMatrix"], ((1,0), (1,0)), mode='constant').tolist()
     },
     fp=input_mnz
 )
