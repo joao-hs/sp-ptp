@@ -1,801 +1,106 @@
 {
-    "requests": 18,
+    "requests": 6,
     "vehicles": [
         {
             "id": 134,
             "trips": [
                 {
                     "origin": 64,
-                    "destination": 15,
-                    "arrival": "12h00",
+                    "destination": 133,
+                    "arrival": "12h24",
                     "patients": []
                 },
                 {
-                    "origin": 15,
-                    "destination": 83,
-                    "arrival": "12h09",
+                    "origin": 133,
+                    "destination": 63,
+                    "arrival": "12h43",
                     "patients": [
-                        153
+                        201
                     ]
                 },
                 {
-                    "origin": 83,
-                    "destination": 113,
-                    "arrival": "12h53",
+                    "origin": 63,
+                    "destination": 133,
+                    "arrival": "13h58",
+                    "patients": [
+                        201
+                    ]
+                },
+                {
+                    "origin": 133,
+                    "destination": 132,
+                    "arrival": "14h52",
                     "patients": []
                 },
                 {
-                    "origin": 113,
-                    "destination": 44,
-                    "arrival": "13h01",
+                    "origin": 132,
+                    "destination": 62,
+                    "arrival": "15h07",
                     "patients": [
-                        182
+                        200
                     ]
                 },
                 {
-                    "origin": 44,
-                    "destination": 114,
-                    "arrival": "13h19",
+                    "origin": 62,
+                    "destination": 128,
+                    "arrival": "15h18",
                     "patients": []
                 },
                 {
-                    "origin": 114,
-                    "destination": 26,
-                    "arrival": "13h23",
+                    "origin": 128,
+                    "destination": 58,
+                    "arrival": "15h28",
                     "patients": [
-                        183
+                        196
                     ]
                 },
                 {
-                    "origin": 26,
-                    "destination": 45,
-                    "arrival": "13h36",
-                    "patients": [
-                        183,
-                        164
-                    ]
-                },
-                {
-                    "origin": 45,
-                    "destination": 95,
-                    "arrival": "13h48",
-                    "patients": [
-                        164
-                    ]
-                },
-                {
-                    "origin": 95,
-                    "destination": 45,
-                    "arrival": "14h07",
+                    "origin": 58,
+                    "destination": 62,
+                    "arrival": "16h08",
                     "patients": []
                 },
                 {
-                    "origin": 45,
-                    "destination": 115,
-                    "arrival": "14h23",
+                    "origin": 62,
+                    "destination": 132,
+                    "arrival": "16h23",
                     "patients": [
-                        183
+                        200
                     ]
                 },
                 {
-                    "origin": 115,
-                    "destination": 86,
-                    "arrival": "14h46",
+                    "origin": 132,
+                    "destination": 58,
+                    "arrival": "18h37",
                     "patients": []
                 },
                 {
-                    "origin": 86,
-                    "destination": 18,
-                    "arrival": "15h04",
+                    "origin": 58,
+                    "destination": 128,
+                    "arrival": "18h47",
                     "patients": [
-                        156
+                        196
                     ]
                 },
                 {
-                    "origin": 18,
-                    "destination": 44,
-                    "arrival": "15h15",
-                    "patients": []
-                },
-                {
-                    "origin": 44,
-                    "destination": 113,
-                    "arrival": "15h26",
-                    "patients": [
-                        182
-                    ]
-                },
-                {
-                    "origin": 113,
-                    "destination": 18,
-                    "arrival": "15h35",
-                    "patients": []
-                },
-                {
-                    "origin": 18,
-                    "destination": 86,
-                    "arrival": "15h54",
-                    "patients": [
-                        156
-                    ]
-                },
-                {
-                    "origin": 86,
-                    "destination": 14,
-                    "arrival": "16h14",
-                    "patients": []
-                },
-                {
-                    "origin": 14,
-                    "destination": 82,
-                    "arrival": "16h16",
-                    "patients": [
-                        152
-                    ]
-                },
-                {
-                    "origin": 82,
+                    "origin": 128,
                     "destination": 64,
-                    "arrival": "16h28",
+                    "arrival": "19h00",
                     "patients": []
                 }
             ]
         },
         {
             "id": 134,
-            "trips": [
-                {
-                    "origin": 64,
-                    "destination": 15,
-                    "arrival": "12h00",
-                    "patients": []
-                },
-                {
-                    "origin": 15,
-                    "destination": 83,
-                    "arrival": "12h09",
-                    "patients": [
-                        153
-                    ]
-                },
-                {
-                    "origin": 83,
-                    "destination": 113,
-                    "arrival": "12h53",
-                    "patients": []
-                },
-                {
-                    "origin": 113,
-                    "destination": 44,
-                    "arrival": "13h01",
-                    "patients": [
-                        182
-                    ]
-                },
-                {
-                    "origin": 44,
-                    "destination": 114,
-                    "arrival": "13h19",
-                    "patients": []
-                },
-                {
-                    "origin": 114,
-                    "destination": 26,
-                    "arrival": "13h23",
-                    "patients": [
-                        183
-                    ]
-                },
-                {
-                    "origin": 26,
-                    "destination": 45,
-                    "arrival": "13h36",
-                    "patients": [
-                        183,
-                        164
-                    ]
-                },
-                {
-                    "origin": 45,
-                    "destination": 95,
-                    "arrival": "13h48",
-                    "patients": [
-                        164
-                    ]
-                },
-                {
-                    "origin": 95,
-                    "destination": 45,
-                    "arrival": "14h07",
-                    "patients": []
-                },
-                {
-                    "origin": 45,
-                    "destination": 115,
-                    "arrival": "14h23",
-                    "patients": [
-                        183
-                    ]
-                },
-                {
-                    "origin": 115,
-                    "destination": 86,
-                    "arrival": "14h46",
-                    "patients": []
-                },
-                {
-                    "origin": 86,
-                    "destination": 18,
-                    "arrival": "15h04",
-                    "patients": [
-                        156
-                    ]
-                },
-                {
-                    "origin": 18,
-                    "destination": 44,
-                    "arrival": "15h15",
-                    "patients": []
-                },
-                {
-                    "origin": 44,
-                    "destination": 113,
-                    "arrival": "15h26",
-                    "patients": [
-                        182
-                    ]
-                },
-                {
-                    "origin": 113,
-                    "destination": 18,
-                    "arrival": "15h35",
-                    "patients": []
-                },
-                {
-                    "origin": 18,
-                    "destination": 86,
-                    "arrival": "15h54",
-                    "patients": [
-                        156
-                    ]
-                },
-                {
-                    "origin": 86,
-                    "destination": 14,
-                    "arrival": "16h14",
-                    "patients": []
-                },
-                {
-                    "origin": 14,
-                    "destination": 82,
-                    "arrival": "16h16",
-                    "patients": [
-                        152
-                    ]
-                },
-                {
-                    "origin": 82,
-                    "destination": 64,
-                    "arrival": "16h28",
-                    "patients": []
-                }
-            ]
+            "trips": []
         },
         {
             "id": 135,
-            "trips": [
-                {
-                    "origin": 65,
-                    "destination": 76,
-                    "arrival": "08h18",
-                    "patients": []
-                },
-                {
-                    "origin": 76,
-                    "destination": 8,
-                    "arrival": "08h23",
-                    "patients": [
-                        146
-                    ]
-                },
-                {
-                    "origin": 8,
-                    "destination": 80,
-                    "arrival": "08h31",
-                    "patients": []
-                },
-                {
-                    "origin": 80,
-                    "destination": 12,
-                    "arrival": "08h47",
-                    "patients": [
-                        150
-                    ]
-                },
-                {
-                    "origin": 12,
-                    "destination": 8,
-                    "arrival": "09h15",
-                    "patients": []
-                },
-                {
-                    "origin": 8,
-                    "destination": 76,
-                    "arrival": "09h42",
-                    "patients": [
-                        146
-                    ]
-                },
-                {
-                    "origin": 76,
-                    "destination": 12,
-                    "arrival": "10h09",
-                    "patients": []
-                },
-                {
-                    "origin": 12,
-                    "destination": 124,
-                    "arrival": "10h22",
-                    "patients": [
-                        150
-                    ]
-                },
-                {
-                    "origin": 124,
-                    "destination": 80,
-                    "arrival": "10h28",
-                    "patients": [
-                        150,
-                        192
-                    ]
-                },
-                {
-                    "origin": 80,
-                    "destination": 54,
-                    "arrival": "10h37",
-                    "patients": [
-                        192
-                    ]
-                },
-                {
-                    "origin": 54,
-                    "destination": 83,
-                    "arrival": "10h44",
-                    "patients": []
-                },
-                {
-                    "origin": 83,
-                    "destination": 15,
-                    "arrival": "11h03",
-                    "patients": [
-                        153
-                    ]
-                },
-                {
-                    "origin": 15,
-                    "destination": 54,
-                    "arrival": "11h24",
-                    "patients": []
-                },
-                {
-                    "origin": 54,
-                    "destination": 124,
-                    "arrival": "11h30",
-                    "patients": [
-                        192
-                    ]
-                },
-                {
-                    "origin": 124,
-                    "destination": 15,
-                    "arrival": "12h00",
-                    "patients": []
-                },
-                {
-                    "origin": 15,
-                    "destination": 83,
-                    "arrival": "12h09",
-                    "patients": [
-                        153
-                    ]
-                },
-                {
-                    "origin": 83,
-                    "destination": 113,
-                    "arrival": "12h53",
-                    "patients": []
-                },
-                {
-                    "origin": 113,
-                    "destination": 44,
-                    "arrival": "13h01",
-                    "patients": [
-                        182
-                    ]
-                },
-                {
-                    "origin": 44,
-                    "destination": 114,
-                    "arrival": "13h19",
-                    "patients": []
-                },
-                {
-                    "origin": 114,
-                    "destination": 26,
-                    "arrival": "13h23",
-                    "patients": [
-                        183
-                    ]
-                },
-                {
-                    "origin": 26,
-                    "destination": 45,
-                    "arrival": "13h36",
-                    "patients": [
-                        183,
-                        164
-                    ]
-                },
-                {
-                    "origin": 45,
-                    "destination": 95,
-                    "arrival": "13h48",
-                    "patients": [
-                        164
-                    ]
-                },
-                {
-                    "origin": 95,
-                    "destination": 45,
-                    "arrival": "14h07",
-                    "patients": []
-                },
-                {
-                    "origin": 45,
-                    "destination": 115,
-                    "arrival": "14h23",
-                    "patients": [
-                        183
-                    ]
-                },
-                {
-                    "origin": 115,
-                    "destination": 86,
-                    "arrival": "14h46",
-                    "patients": []
-                },
-                {
-                    "origin": 86,
-                    "destination": 18,
-                    "arrival": "15h04",
-                    "patients": [
-                        156
-                    ]
-                },
-                {
-                    "origin": 18,
-                    "destination": 44,
-                    "arrival": "15h15",
-                    "patients": []
-                },
-                {
-                    "origin": 44,
-                    "destination": 113,
-                    "arrival": "15h26",
-                    "patients": [
-                        182
-                    ]
-                },
-                {
-                    "origin": 113,
-                    "destination": 18,
-                    "arrival": "15h35",
-                    "patients": []
-                },
-                {
-                    "origin": 18,
-                    "destination": 86,
-                    "arrival": "15h54",
-                    "patients": [
-                        156
-                    ]
-                },
-                {
-                    "origin": 86,
-                    "destination": 32,
-                    "arrival": "16h11",
-                    "patients": []
-                },
-                {
-                    "origin": 32,
-                    "destination": 14,
-                    "arrival": "16h14",
-                    "patients": [
-                        170
-                    ]
-                },
-                {
-                    "origin": 14,
-                    "destination": 82,
-                    "arrival": "16h16",
-                    "patients": [
-                        170,
-                        152
-                    ]
-                },
-                {
-                    "origin": 82,
-                    "destination": 101,
-                    "arrival": "16h37",
-                    "patients": [
-                        170
-                    ]
-                },
-                {
-                    "origin": 101,
-                    "destination": 65,
-                    "arrival": "16h51",
-                    "patients": []
-                }
-            ]
+            "trips": []
         },
         {
             "id": 135,
-            "trips": [
-                {
-                    "origin": 65,
-                    "destination": 76,
-                    "arrival": "08h18",
-                    "patients": []
-                },
-                {
-                    "origin": 76,
-                    "destination": 8,
-                    "arrival": "08h23",
-                    "patients": [
-                        146
-                    ]
-                },
-                {
-                    "origin": 8,
-                    "destination": 80,
-                    "arrival": "08h31",
-                    "patients": []
-                },
-                {
-                    "origin": 80,
-                    "destination": 12,
-                    "arrival": "08h47",
-                    "patients": [
-                        150
-                    ]
-                },
-                {
-                    "origin": 12,
-                    "destination": 8,
-                    "arrival": "09h15",
-                    "patients": []
-                },
-                {
-                    "origin": 8,
-                    "destination": 76,
-                    "arrival": "09h42",
-                    "patients": [
-                        146
-                    ]
-                },
-                {
-                    "origin": 76,
-                    "destination": 12,
-                    "arrival": "10h09",
-                    "patients": []
-                },
-                {
-                    "origin": 12,
-                    "destination": 124,
-                    "arrival": "10h22",
-                    "patients": [
-                        150
-                    ]
-                },
-                {
-                    "origin": 124,
-                    "destination": 80,
-                    "arrival": "10h28",
-                    "patients": [
-                        150,
-                        192
-                    ]
-                },
-                {
-                    "origin": 80,
-                    "destination": 54,
-                    "arrival": "10h37",
-                    "patients": [
-                        192
-                    ]
-                },
-                {
-                    "origin": 54,
-                    "destination": 83,
-                    "arrival": "10h44",
-                    "patients": []
-                },
-                {
-                    "origin": 83,
-                    "destination": 15,
-                    "arrival": "11h03",
-                    "patients": [
-                        153
-                    ]
-                },
-                {
-                    "origin": 15,
-                    "destination": 54,
-                    "arrival": "11h24",
-                    "patients": []
-                },
-                {
-                    "origin": 54,
-                    "destination": 124,
-                    "arrival": "11h30",
-                    "patients": [
-                        192
-                    ]
-                },
-                {
-                    "origin": 124,
-                    "destination": 15,
-                    "arrival": "12h00",
-                    "patients": []
-                },
-                {
-                    "origin": 15,
-                    "destination": 83,
-                    "arrival": "12h09",
-                    "patients": [
-                        153
-                    ]
-                },
-                {
-                    "origin": 83,
-                    "destination": 113,
-                    "arrival": "12h53",
-                    "patients": []
-                },
-                {
-                    "origin": 113,
-                    "destination": 44,
-                    "arrival": "13h01",
-                    "patients": [
-                        182
-                    ]
-                },
-                {
-                    "origin": 44,
-                    "destination": 114,
-                    "arrival": "13h19",
-                    "patients": []
-                },
-                {
-                    "origin": 114,
-                    "destination": 26,
-                    "arrival": "13h23",
-                    "patients": [
-                        183
-                    ]
-                },
-                {
-                    "origin": 26,
-                    "destination": 45,
-                    "arrival": "13h36",
-                    "patients": [
-                        183,
-                        164
-                    ]
-                },
-                {
-                    "origin": 45,
-                    "destination": 95,
-                    "arrival": "13h48",
-                    "patients": [
-                        164
-                    ]
-                },
-                {
-                    "origin": 95,
-                    "destination": 45,
-                    "arrival": "14h07",
-                    "patients": []
-                },
-                {
-                    "origin": 45,
-                    "destination": 115,
-                    "arrival": "14h23",
-                    "patients": [
-                        183
-                    ]
-                },
-                {
-                    "origin": 115,
-                    "destination": 86,
-                    "arrival": "14h46",
-                    "patients": []
-                },
-                {
-                    "origin": 86,
-                    "destination": 18,
-                    "arrival": "15h04",
-                    "patients": [
-                        156
-                    ]
-                },
-                {
-                    "origin": 18,
-                    "destination": 44,
-                    "arrival": "15h15",
-                    "patients": []
-                },
-                {
-                    "origin": 44,
-                    "destination": 113,
-                    "arrival": "15h26",
-                    "patients": [
-                        182
-                    ]
-                },
-                {
-                    "origin": 113,
-                    "destination": 18,
-                    "arrival": "15h35",
-                    "patients": []
-                },
-                {
-                    "origin": 18,
-                    "destination": 86,
-                    "arrival": "15h54",
-                    "patients": [
-                        156
-                    ]
-                },
-                {
-                    "origin": 86,
-                    "destination": 32,
-                    "arrival": "16h11",
-                    "patients": []
-                },
-                {
-                    "origin": 32,
-                    "destination": 14,
-                    "arrival": "16h14",
-                    "patients": [
-                        170
-                    ]
-                },
-                {
-                    "origin": 14,
-                    "destination": 82,
-                    "arrival": "16h16",
-                    "patients": [
-                        170,
-                        152
-                    ]
-                },
-                {
-                    "origin": 82,
-                    "destination": 101,
-                    "arrival": "16h37",
-                    "patients": [
-                        170
-                    ]
-                },
-                {
-                    "origin": 101,
-                    "destination": 65,
-                    "arrival": "16h51",
-                    "patients": []
-                }
-            ]
+            "trips": []
         }
     ]
 }

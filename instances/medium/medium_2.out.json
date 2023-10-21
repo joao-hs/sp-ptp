@@ -1,5 +1,5 @@
 {
-    "requests": 4,
+    "requests": 0,
     "vehicles": [
         {
             "id": 155,
@@ -15,67 +15,11 @@
         },
         {
             "id": 157,
-            "trips": [
-                {
-                    "origin": 48,
-                    "destination": 56,
-                    "arrival": "09h27",
-                    "patients": []
-                },
-                {
-                    "origin": 56,
-                    "destination": 6,
-                    "arrival": "09h36",
-                    "patients": [
-                        166
-                    ]
-                },
-                {
-                    "origin": 6,
-                    "destination": 48,
-                    "arrival": "09h53",
-                    "patients": []
-                }
-            ]
+            "trips": []
         },
         {
             "id": 158,
-            "trips": [
-                {
-                    "origin": 48,
-                    "destination": 56,
-                    "arrival": "09h27",
-                    "patients": []
-                },
-                {
-                    "origin": 56,
-                    "destination": 6,
-                    "arrival": "09h36",
-                    "patients": [
-                        166
-                    ]
-                },
-                {
-                    "origin": 6,
-                    "destination": 63,
-                    "arrival": "13h52",
-                    "patients": []
-                },
-                {
-                    "origin": 63,
-                    "destination": 13,
-                    "arrival": "14h03",
-                    "patients": [
-                        173
-                    ]
-                },
-                {
-                    "origin": 13,
-                    "destination": 48,
-                    "arrival": "14h14",
-                    "patients": []
-                }
-            ]
+            "trips": []
         }
     ]
 }

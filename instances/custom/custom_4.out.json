@@ -7,21 +7,33 @@
                 {
                     "origin": 1,
                     "destination": 2,
-                    "arrival": "07h19",
+                    "arrival": "07h05",
                     "patients": []
                 },
                 {
                     "origin": 2,
                     "destination": 0,
-                    "arrival": "07h27",
+                    "arrival": "07h13",
                     "patients": [
                         4
                     ]
                 },
                 {
                     "origin": 0,
+                    "destination": 1,
+                    "arrival": "07h21",
+                    "patients": []
+                },
+                {
+                    "origin": 1,
+                    "destination": 0,
+                    "arrival": "09h30",
+                    "patients": []
+                },
+                {
+                    "origin": 0,
                     "destination": 2,
-                    "arrival": "09h52",
+                    "arrival": "09h38",
                     "patients": [
                         4
                     ]
@@ -29,7 +41,7 @@
                 {
                     "origin": 2,
                     "destination": 1,
-                    "arrival": "10h00",
+                    "arrival": "09h46",
                     "patients": []
                 }
             ]
