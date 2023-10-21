@@ -156,7 +156,6 @@ instance["noPlaces"] = noPlaces
 instance["placeCategory"] = [get_place_category(place["category"]) for place in data["places"]]
 
 noTrueVehicles = len(data["vehicles"])
-instance["noOriginalVehicles"] = noTrueVehicles
 vehicleAvailabilityLenghts = [len(vehicle["availability"]) for vehicle in data["vehicles"]]
 noVehicles = sum(vehicleAvailabilityLenghts)
 instance["noVehicles"] = noVehicles
@@ -230,61 +229,6 @@ for key in requestData:
 
 instance["distMatrix"] = pad(data["distMatrix"], ((1,0), (1,0)), mode='constant')
 
-
-# print("%=============== DATA INPUT TO MINIZINC ===============")
-# print("sameVehicleBackward =", "true" if data["sameVehicleBackward"] else "false", end=";\n", file=dzn_file)
-# print("maxWaitTime =", get_minutes(data["maxWaitTime"]), end=";\n", file=dzn_file)
-# print("noPlaces =", noPlaces, end=";\n", file=dzn_file)
-# print("placeCategory =", [get_place_category(place["category"]) for place in data["places"]], end=";\n", file=dzn_file)
-# print("noVehicles =", noVehicles, end=";\n", file=dzn_file)
-# print("noOriginalVehicles =", noTrueVehicles, end=";\n", file=dzn_file)
-# print("expandedToOriginalVehicle =", [vehiclesIdToIndexRange[vehiclesIndexToId[i]][0] for i in range(noVehicles)], end=";\n", file=dzn_file)
-# print("noCategories =", noCategories, end=";\n", file=dzn_file)
-# print("vehicleCanTake =", [["true" if i else "false" for i in v] for v in vehicleData["vehicleCanTake"]], end=";\n", file=dzn_file)
-# print("vehicleStart =", vehicleData["vehicleStart"], end=";\n", file=dzn_file)
-# print("vehicleEnd =", vehicleData["vehicleEnd"], end=";\n", file=dzn_file)
-# print("vehicleCapacity =", vehicleData["vehicleCapacity"], end=";\n", file=dzn_file)
-# print("vehicleAvailability =", vehicleData["vehicleAvailability"], end=";\n", file=dzn_file)
-# print("noRequests =", noRequests, end=";\n", file=dzn_file)
-# print("requestStart =", requestData["requestStart"], end=";\n", file=dzn_file)
-# print("requestDestination =", requestData["requestDestination"], end=";\n", file=dzn_file)
-# print("requestReturn =", requestData["requestReturn"], end=";\n", file=dzn_file)
-# print("requestLoad =", requestData["requestLoad"], end=";\n", file=dzn_file)
-# print("requestServiceStartTime =", requestData["requestServiceStartTime"], end=";\n", file=dzn_file)
-# print("requestServiceDuration =", requestData["requestServiceDuration"], end=";\n", file=dzn_file)
-# print("requestCategory =", requestData["requestCategory"], end=";\n", file=dzn_file)
-# print("requestBoardingDuration =", requestData["requestBoardingDuration"], end=";\n", file=dzn_file)
-# print("distMatrix =", data["distMatrix"], end=";\n", file=dzn_file)
-dump(
-    {
-        "sameVehicleBackward": data["sameVehicleBackward"],
-        "maxWaitTime": get_minutes(data["maxWaitTime"]),
-        "noPlaces": noPlaces,
-        "placeCategory": [get_place_category(place["category"]) for place in data["places"]],
-        "noOriginalVehicles": noTrueVehicles,
-        "noVehicles": noVehicles,
-        "noCategories": noCategories,
-        "vehicleCanTake": vehicleData["vehicleCanTake"],
-        "vehicleStart": vehicleData["vehicleStart"],
-        "vehicleEnd": vehicleData["vehicleEnd"],
-        "vehicleCapacity": vehicleData["vehicleCapacity"],
-        "vehicleAvailability": vehicleData["vehicleAvailability"],
-        "expandedToOriginalVehicle": vehicleData["expandedToOriginalVehicle"],
-        "noRequests": noRequests,
-        "requestStart": requestData["requestStart"],
-        "requestDestination": requestData["requestDestination"],
-        "requestReturn": requestData["requestReturn"],
-        "requestLoad": requestData["requestLoad"],
-        "requestServiceStartTime": requestData["requestServiceStartTime"],
-        "requestServiceDuration": requestData["requestServiceDuration"],
-        "requestCategory": requestData["requestCategory"],
-        "requestBoardingDuration": requestData["requestBoardingDuration"],
-        "distMatrix": pad(data["distMatrix"], ((1,0), (1,0)), mode='constant').tolist()
-    },
-    fp=input_mnz
-)
-# print("======================================================")
-
 # -----------------------------------------------------------------------------
 # --------------------------- Solve & Parse Output ----------------------------
 # -----------------------------------------------------------------------------
@@ -307,7 +251,7 @@ dump(
 # }
 
 
-result = instance.solve(timeout=timedelta(seconds=50), free_search=True, random_seed=0)
+result = instance.solve(timeout=timedelta(seconds=55), free_search=True, random_seed=0)
 
 print("result.status:", result.status)
 if result.status is not Status.OPTIMAL_SOLUTION and result.status is not Status.SATISFIED:
@@ -350,4 +294,3 @@ dump(
     },
     fp=output_file
 )
-

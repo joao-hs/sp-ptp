@@ -14,7 +14,6 @@ function run_test () {
     timeout 70 python3 proj.py $1 ${1/.in.json/.out.json}
     endSingle=$(date +%s.%N)
     runtimeSingle=$(echo "$endSingle - $startSingle" | bc)
-    python3 jsonToDzn.py $1.mzn.json ${1/.in.json/.dzn}
     echo "TEST DONE ----------------------------------------------------"
     echo "Completed in $runtimeSingle seconds.") > ${1/.in.json/.out}
     echo "Ended $(basename ${1/.in.json})"
